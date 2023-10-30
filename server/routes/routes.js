@@ -6,11 +6,12 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 const routes = express.Router();
 const jwtSecret = "BlogManagement";
+import mongoose from "mongoose";
 
 
 async function fetchData() {
   try {
-      const data = await Post.find().limit(10); // Thực hiện truy vấn MongoDB để lấy dữ liệu
+      const data = await Post.find().limit(3); // Thực hiện truy vấn MongoDB để lấy dữ liệu
       return data; // Trả về kết quả truy vấn
   } catch (error) {
       console.error(error);
@@ -48,118 +49,296 @@ routes.get("/", async (req, res) => {
     res.render("index", { layout: "index", locals, data,category, current: page, nextPage: hasNextPage ? nextPage : null  });
   } catch (error) {
     console.log(error);
+    res.status(500).send('Error occurred during search');
   }
 });  
-
-// routes.get("footer", async (req, res) => {
-//   try {
-//     const dataFooter = await Post.find();
-
-//     res.render("/footer", { layout: "/footer", dataFooter });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });  
 
 // Laays detail
 routes.get("/:id", async (req, res) => {
   try {
     let slug = req.params.id;
-    const data = await Post.findById({ _id : slug });
-    const locals = {
-      title: data.title
-    };
-    
-    res.render("blogDetail", { layout: "blogDetail", locals, data });
+    const isValidObjectId = mongoose.Types.ObjectId.isValid(slug);
+    if(isValidObjectId){
+      const data = await Post.findById( new mongoose.Types.ObjectId(slug));
+      const locals = {
+        title: data.title
+      };
+      res.render("blogDetail", { layout: "blogDetail", locals, data });
+    }
   } catch (error) {
     console.log(error);
+    res.status(500).send('Error occurred during search');
   }
 });
 
-// routes.post("/search", async (req, res) => {
-//   try {
-//     const locals = {
-//       title: "Search my blog with EJS",
-//     };
-//     let searchTerm = req.body.searchTerm
-//     const searchNoSpecialChar = searchTerm.replace(/[^a-zA-Z0-9]/g, "")
-//     const data = await Post.find({
-//       $or: [
-//         { title: { $regex: new RegExp(searchNoSpecialChar, "i") } },
-//         { body: { $regex: new RegExp(searchNoSpecialChar, "i") } },
-//         { category: { $regex: new RegExp(searchNoSpecialChar, "i") } },
+routes.post("/search", async (req, res) => {
+  try {
+    let searchTerm = req.body.searchTerm;
+    // Xóa ký tự đặc biệt để tìm kiếm chính xác hơn
+    const searchNoSpecialChar = searchTerm.replace(/[^a-zA-Z0-9\s]/g, "");
+    const data = await Post.find({
+      $or: [
+        { title: { $regex: new RegExp(searchNoSpecialChar, "i") } },
+        { content: { $regex: new RegExp(searchNoSpecialChar, "i") } },
+        { category: { $regex: new RegExp(searchNoSpecialChar, "i") } },
+      ],
+    });
+    console.log(data);
+    const locals = {
+      title: "Search results for '" + searchTerm + "'",
+    };
+    const category = await Categories.find();
+    
+    if (data.length === 0) {
+      res.status(400).send('Invalid ID format');
+    } else {
+      res.render("search", { data, locals, category, layout: "index" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Error occurred during search');
+  }
+});
 
-//       ],
-//     });
-//     res.render("search", { data, locals, layout: "pages/index" });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
+// Login
+routes.get('/login', async (req, res) => {
+  res.render('pages/login');
+});
 
-// routes.get("/login", async (req, res) => {
-//   try {
-//     res.render("login", { layout: "pages/login" });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
-// routes.get("/adminUI", async (req, res) => {
-//   try {
-//     const data = await Post.find();
-//     res.render("adminUI", { layout: "pages/adminUI", data });
-//   } catch (error) {
-//     console.log(error);
-//   }
-// });
 
-// routes.get("/editBlog", (req, res) => {
-//   res.render("editBlog", { layout: "Admin/editBlog" });
-// });
-// routes.get("/addBlog", (req, res) => {
-//   res.render("addBlog", { layout: "Admin/addBlog" });
-// });
-// routes.post("/adminUI",async (req, res) => {
-//   try {
-//     const {username, password } = req.body;
-//     const user = await User.findOne({username})
-//   if(!user) {
-//     return res.status(401).json({
-//       message: 'Invalid credentials'
-//     })
-//   }
-//   const isPasswordValid = await bcrypt.compare(password, user.password)
-//   if(!isPasswordValid){
-//     return res.status(401).json({ message: "Invalid Credentials"})
-//   }
-//   const token =jwt.sign({ userId: user._id} , jwtSecret)
-//   res.cookie('token', token, {httpOnly: true})
-//   res.redirect('/adminUI')
+routes.post('/login', async (req, res) => {
+  try {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username }); 
 
-//   } catch (error) {
-//       console.log(error);
-//   }
+    if (!user || !(await bcrypt.compare(password, user.password))) {
+      res.status(401).send('Invalid username or password');
+    } else {
+      const token = jwt.sign({ userId: user._id }, 'yourSecretKey');
+      // Send token in cookie
+      res.cookie('token', token, { httpOnly: true }); 
+      res.redirect('/adminUI'); 
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).send('Error occurred during login');
+  }
+});
 
-// });
+// Middleware để kiểm tra token trước khi vào trang admin
+const authMiddleware = function verifyToken(req, res, next) {
+  const token = req.cookies.token; // Get token from cookie
+  if (!token) {
+    return res.redirect('/login'); 
+  }
+  try {
+    // decode token
+    const decoded = jwt.verify(token, 'yourSecretKey'); 
+    // Save userId from token to request to use other route 
+    req.userId = decoded.userId; 
+    next(); 
+  } catch (error) {
+    return res.status(403).send('Invalid or expired token');
+  }
+}
 
-// routes.post("/register", async (req, res) => {
-//   try {
-//     const {username, password } = req.body;
-//     const hashedPassword = await bcrypt.hash(password, 10);
-//   try {
-//     const user = await User.create({username, password: hashedPassword});
-//     res.status(201).json({message: 'User created', user})
-//   } catch (error) {
-//     if (error.code === 11000){
-//       res.status(409).json({message: 'User already in use'})
-//     }
-//     res.status(500).json({message: 'Internal server error'})
-//   }
-//   } catch (error) {
-//     console.log(error);
-//   }
+// Route trang admin - just redirect if login success
+routes.get('/adminUI', authMiddleware, async (req, res) => {
+   const data = await User.find();
+  res.render('adminUI', {data, layout: "adminUI"}); 
+});
 
-// });
+routes.get("/Admin/editBlog/:id", authMiddleware, async (req, res) => {
+  try {
+    const data = await Post.findOne({ _id: req.params.id });
+    
+    if (data) {
+      const date = data.date;
+      const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+      res.render("editPost", { layout: "Admin/editBlog", data, formattedDate });
+    } else {
+      res.status(404).send('Data not found');
+    }
+  } catch (error) {
+    console.log(error);
+    res.status(500).send('Internal Server Error');
+  }
+});
+
+routes.put('/adminUI/edit/:id', authMiddleware, async(req, res) => {
+  try {
+    const { title, category, img, body, date } = req.body;
+    if (!date) {
+      return res.status(400).send("Date is required");
+    }
+    const updatedPost = await Post.findByIdAndUpdate(
+      req.params.id,
+      {
+        title,
+        date: new Date(date), // Convert the date string to a JavaScript Date object
+        category,
+        shortContent,
+        content,
+        author,
+        img,
+        imgFooter
+      },
+      { new: true }
+    ); 
+        if (!updatedPost) {
+          return res.status(404).send("Post not found");
+        }
+    res.redirect(`/Admin/editBlog/${req.params.id}`);
+  } catch (error) {
+    console.log(error)
+     res.status(500).send("Server Error");
+  }
+})
+
+routes.get("/adminUI/add",authMiddleware, (req, res) => {
+  res.render("addBlog");
+});
+
+routes.post("/admin/add", authMiddleware,async (req, res) => {
+  try {
+    console.log(req.body)
+    try {
+      const newPost = new Post({
+        title: req.body.title,
+        category: req.body.category,
+        img: req.body.img,
+        body: req.body.body,
+        data: req.body.date
+      })
+      await Post.create(newPost)
+       res.redirect('/adminUI')
+    } catch (error) {
+      console.log(error);
+    }
+   
+  } catch (error) {
+    console.log(error);
+  }
+
+});
+
+routes.get("/register", async (req, res) => {
+  try {
+    res.render("register", { layout: "login" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+routes.post("/register", async (req, res) => {
+  try {
+    const { name, email, username, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await User.create({ name, email, username, password: hashedPassword });
+    res.status(201).json({ message: 'User created', user });
+  } catch (error) {
+    console.log(error);
+    if (error.code === 11000) {
+      return res.status(409).json({ message: 'User already in use' });
+    }
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+routes.post("/admin/delete/:id", async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const result = await Post.findByIdAndRemove(postId);
+
+    if (!result) {
+      return res.status(404).json({ success: false, message: "Post not found" });
+    }
+
+    res.json({ success: true, message: "Post deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
+
+
+routes.get('/change-password', (req, res) => {
+  res.render('changePassword'); 
+});
+
+routes.post('/change-password', async (req, res) => {
+  try {
+    const { currentPassword, newPassword, renewpassword } = req.body;
+
+    // check newPassword like renewpassword
+    if (newPassword !== renewpassword) {
+      return res.render('changePassword', {
+        error: 'New password and confirm password do not match',
+      });
+    }
+
+    const user = await User.findOne({ _id: req.user._id }); // Giả sử thông tin user được lưu trong session
+
+    const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+
+    if (!isPasswordValid) {
+      return res.render('changePassword', { error: 'Current password is incorrect' });
+    }
+
+    // hashcode new password
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+
+    // update new password to db
+    user.password = hashedPassword;
+    await user.save();
+
+    res.render('changePassword', { success: 'Password changed successfully' });
+  } catch (error) {
+    console.error('Error changing password:', error);
+    res.render('Admin/changePassword', { error: 'Internal server error' });
+  }
+});
+
+//Edit profile
+routes.get('/edit-profile', authMiddleware, async (req, res) => {
+  try {
+    // get user from session
+    const user = await User.findOne({ _id: req.user._id }); 
+
+    res.render('Admin/editProfile', { layout: 'users-profile', user });
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    res.status(500).send('Internal server error');
+  }
+});
+
+routes.post('/edit-profile', authMiddleware, async (req, res) => {
+  try {
+    const { fullName, about, company, job, country, address, phone, email } = req.body;
+    
+    // get user from session
+    const user = await User.findOne({ _id: req.user._id }); 
+
+    // update profile
+    user.fullName = fullName;
+    user.about = about;
+    user.company = company;
+    user.job = job;
+    user.country = country;
+    user.address = address;
+    user.phone = phone;
+    user.email = email;
+
+    await user.save();
+
+    res.redirect('Admin/users-profile');
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    res.status(500).send('Internal server error');
+  }
+});
 
 export default routes;
 

@@ -18,7 +18,7 @@
         <li class="nav-item dropdown">
           <a
             class="nav-link"
-            href="#home"
+            href="/index.ejs"
             id="navbarDropdownMenuLink"
             role="button"
             data-bs-toggle="dropdown"
@@ -86,17 +86,26 @@
 </nav>
 
 <div class="search">
-  <form action="search" method="get">
+  <form action="/search" method="post" role="search">
     <div class="form-group-search">
-      <input
-        type="search"
-        class="search-field"
-        name="search"
-        placeholder="Search and hit enter..."
-      />
-      <button type="submit" class="search-btn">
-        <i class="fa-solid fa-magnifying-glass"></i>
-      </button>
+        <input
+          id="s"
+          type="text"
+          class="search-field"
+          name="searchTerm"
+          placeholder="Search and hit enter..."
+        />
+        <button type="submit" class="search-btn" name="submit">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
     </div>
   </form>
 </div>
+
+
+
+
+
+
+
+

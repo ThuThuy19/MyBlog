@@ -5,6 +5,11 @@
     <link rel="stylesheet" href="/css/blogDetail.css" />
   </head>
   <body class="container">
+    <div class="logoUser">
+      <a href="index">
+        <img src="/img/logo.png" alt="Anh logo" />
+      </a>
+  </div>
     <header><%- include ('../partials/header') %></header>
     <main>
       <div class="post__container">
@@ -114,22 +119,24 @@
         <div class="related__post">
             <h2>Related Article</h2>
             <div class="related__item__container">
+              <% sharedData.forEach(function(blog) { %>
                 <div class="related__item mt-4 me-2">
                   <div class="related__img">
-                      <img src="<%= data.img %>" alt="Anh <%= data.category %>">
+                      <img src="<%= blog.img %>" alt="Anh <%= blog.category %>">
                       <div class="category">
-                          <a href="#" title="View all posts in <%= data.category %>"><%= data.category %></a>
+                          <a href="#" title="View all posts in <%= blog.category %>"><%= blog.category %></a>
                       </div>
                   </div>
                   <div class="related__text">
-                      <p class="related__date date"><%= data.date %></p>
-                      <p class="related__title"><a href="#"><%= data.title %></a></p>
+                      <p class="related__date date"><%= blog.date %></p>
+                      <p class="related__title"><a href="#"><%= blog.title %></a></p>
                   </div>
                   <div class="related__author">
                       Post by
-                      <a href="#"><%= data.author %></a>
+                      <a href="#"><%= blog.author %></a>
                   </div>
                 </div>
+              <% }); %>
             </div>
         </div>
         <!-- Page Comments -->  
