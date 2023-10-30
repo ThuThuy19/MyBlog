@@ -11,23 +11,23 @@ import mongoose from "mongoose";
 
 async function fetchData() {
   try {
-      const data = await Post.find().limit(3); // Thực hiện truy vấn MongoDB để lấy dữ liệu
-      return data; // Trả về kết quả truy vấn
+      const data = await Post.find().limit(3); 
+      return data; 
   } catch (error) {
       console.error(error);
-      return []; // Xử lý lỗi và trả về dữ liệu mặc định
+      return []; 
   }
 }
 
 routes.use(async (req, res, next) => {
   try {
-    const sharedData = await fetchData(); // Thực hiện truy vấn cơ sở dữ liệu
-    res.locals.sharedData = sharedData; // Gán dữ liệu vào res.locals
+    const sharedData = await fetchData();
+    // Gán dữ liệu vào res.locals
+    res.locals.sharedData = sharedData; 
     next();
   } catch (error) {
-    // Xử lý lỗi khi truy xuất cơ sở dữ liệu
     console.error(error);
-    res.locals.sharedData = {}; // Gán dữ liệu mặc định hoặc xử lý lỗi
+    res.locals.sharedData = {}; 
     next();
   }
 });
