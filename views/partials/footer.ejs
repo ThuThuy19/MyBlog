@@ -1,0 +1,65 @@
+<!-- views/partials/footer.ejs -->
+<hr>
+
+<div class="footer__top row">
+    <div class="footer__top_container row">
+        <div class="footer__img col-4">
+            <a href="#">
+                <img src="/img/logo.png" alt="">
+            </a>
+        </div>
+        <div class="footer__top__content col-8">
+            <p class="footer__text"><i>Based in Utah, USA, Wanderland is a blog by Markus Thompson. His posts
+                explore outdoor experiences through photos and diaries with tips & tricks.</i></p>
+        </div>
+    </div>
+</div>
+<div class="footer__middle__content">
+    <div class="footer__middle__container row">
+        <div class="footer footer__aboutBlog col-lg-3 col-md-6 col-sm-10 order-sm-12">
+            <h6 class="footer__heading">About the blog</h6>
+            <p class="footer__text text__middle">Lorem ipsum dolor sit amet, conse ctetur adipisicing elit, sed do eiusmod mas.</p>
+        </div>
+
+        <div class="footer footer__subcribe col-lg-3 col-md-6 col-sm-10 order-sm-12">
+            <h6 class="footer__heading">Subscribe to newsletter</h6>
+            <div class="footer__inputInfo">
+                <input type="text" placeholder="Your name ...">
+                <input type="email" placeholder="Your email ...">
+            </div>
+            <button type="submit" class="btn btn__Send">Send</button>
+        </div>
+        
+        <div class="footer footer__recent__news col-lg-3 col-md-6 col-sm-10 order-sm-12">
+            <h6 class="footer__heading">Recent news</h6>
+            <div class="list__News">
+                <% sharedData.forEach(function(recentNew) { %>
+                <div class="new__item">
+                    <i class="fa-regular fa-calendar"></i>
+                    <span class="date"><i><%= recentNew.date %></i></span>
+                    <a href="#" title="<%= recentNew.title %>"><%= recentNew.title %></a>
+                </div>
+                <% }); %>
+            </div>
+        </div>
+
+        <div class="footer footer__newFeed col-lg-3 col-md-6 col-sm-10 order-sm-12">
+            <h6 class="footer__heading">New Feed</h6>
+            <div class="new__Feed_content">
+                <% sharedData.forEach(function(img) { %>
+                <a href="/<%= img._id%>" target="_blank" class="new__Feed__item">
+                    <img src="<%= img.img %>" alt="Anh footer">
+                </a>
+                <% }); %>
+            </div>
+        </div>
+
+
+
+
+
+    </div>
+</div>
+<div class="footer__bottom__content">
+
+</div>

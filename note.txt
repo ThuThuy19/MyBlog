@@ -1,0 +1,41 @@
+npm i nodemon --save-dev
+npm install mongodb --save
+
+post
+	id
+	title 
+	date   
+	short content
+	content  
+	author  
+	img  
+
+user
+	id
+	username  
+	password  
+	role		
+	fullname 	
+	email	
+	company 	
+	job	
+	country	
+	address	
+	phone	
+	about	
+
+categories
+	id
+	category
+
+mongodb
+username: thuynttoneadx
+pass: Thuy.oneadx
+
+
+mongodb+srv://thuynttoneadx:Thuy.oneadx@cluster0.9p4wxb9.mongodb.net/BlogManagement?retryWrites=true&w=majority
+
+
+
+(https://www.youtube.com/watch?v=GfnTTpTgsBY)
+(https://github.com/CODE-LY-CODE-HANH/Share_source_code/blob/master/server_node_js/bai9/client/App.js)

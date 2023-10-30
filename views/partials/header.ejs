@@ -1,0 +1,102 @@
+<!-- views/partials/header.ejs -->
+
+<nav class="menu__mobile">
+  <div class="container-fluid navbar navbar-expand-lg menu__desktop">
+    <button
+      class="navbar-toggler"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavDropdown"
+      aria-controls="navbarNavDropdown"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <i class="fa-solid fa-bars"></i>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+      <ul class="navbar-nav">
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link"
+            href="#home"
+            id="navbarDropdownMenuLink"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Home
+            <i class="fa-solid fa-angle-down"></i>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li class="menu-item"><a href="#">Page Full Width</a></li>
+            <li class="menu-item"><a href="#">Page with Left Sidebar</a></li>
+            <li class="menu-item"><a href="#">Page with Right Sidebar</a></li>
+            <li class="menu-item"><a href="#">Post Full Width</a></li>
+          </ul>
+        </li>
+  
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link"
+            href="#features"
+            id="navbarDropdownMenuLink"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Features
+            <i class="fa-solid fa-angle-down"></i>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li class="menu-item"><a href="#">Page with Right Sidebar</a></li>
+            <li class="menu-item"><a href="#">Post Full Width</a></li>
+            <li class="menu-item"><a href="#">Post with Left Sidebar</a></li>
+          </ul>
+        </li>
+  
+        <li class="nav-item dropdown">
+          <a
+            class="nav-link"
+            href="#blog"
+            id="navbarDropdownMenuLink"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+          >
+            Blog
+            <i class="fa-solid fa-angle-down"></i>
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+            <li class="menu-item"><a href="#">Page Full Width</a></li>
+            <li class="menu-item"><a href="#">Page with Left Sidebar</a></li>
+            <li class="menu-item"><a href="#">Page with Right Sidebar</a></li>
+            <li class="menu-item"><a href="#">Post Full Width</a></li>
+            <li class="menu-item"><a href="#">Post with Right Sidebar</a></li>
+            <li class="menu-item"><a href="#">Post with Left Sidebar</a></li>
+            <li class="menu-item"><a href="#">Sub item</a></li>
+          </ul>
+        </li>
+  
+        <li class="nav-item dropdown">
+          <a class="nav-link" href="#">Contact</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="search">
+  <form action="search" method="get">
+    <div class="form-group-search">
+      <input
+        type="search"
+        class="search-field"
+        name="search"
+        placeholder="Search and hit enter..."
+      />
+      <button type="submit" class="search-btn">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </div>
+  </form>
+</div>

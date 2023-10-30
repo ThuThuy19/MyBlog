@@ -1,0 +1,205 @@
+/* Đối với iPad (min-width >= 768px và max-width < 1024px) */
+@media (min-width: 768px) and (max-width: 1023px) {
+  #sidebar {
+    display: none;
+  }
+  #content {
+    width: 100%;
+  }
+  .form__AddBlog table tr td .img {
+    width: 60%;
+  }
+  .form__AddBlog form {
+    width: 100%;
+    margin: 0;
+  }
+  .form__AddBlog table tr td .img {
+    width: 60%;
+  }
+  .container {
+    max-width: 95%;
+    margin: 0 auto;
+  }
+  .footer__middle__container .footer {
+    margin: 10px auto;
+  }
+  .register .container {
+    width: 80%;
+  }
+  .navbar-nav {
+    flex-direction: column;
+    width: 100%;
+  }
+  .navbar {
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    margin: 0;
+    box-shadow: none;
+  }
+  .navbar-collapse{
+    background-color: var(--bg-header);
+    width: 100%;
+    height: 100%;
+  }
+  .dropdown-menu{
+    border: 0;
+  }
+  .dropdown-menu .menu-item{
+    border: 0;
+    border-bottom: 1px solid #e6e4e4;
+  }
+  .dropdown-menu .menu-item a{
+    text-align: center;
+    background-color: var(--bg-header);
+  }
+  .menu__mobile{
+    background-color: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
+  .menu__mobile button{
+    font-size: 30px;
+  }
+}
+
+/* Đối với điện thoại (max-width < 768px) */
+@media (max-width: 768px) {
+  #sidebar {
+    display: none;
+  }
+  #content {
+    width: 100%;
+  }
+  .form__AddBlog {
+    padding: 0;
+  }
+  .form__AddBlog form {
+    width: 100%;
+    margin: 0 auto;
+  }
+  .form__AddBlog table tr td .img {
+    width: 100%;
+  }
+  .dropdown-menu-arrow::before {
+    content: "";
+    width: 13px;
+    height: 13px;
+    background: #fff;
+    position: absolute;
+    top: -7px;
+    right: 20px;
+    transform: rotate(45deg);
+    border-top: 1px solid #eaedf1;
+    border-left: 1px solid #eaedf1;
+  }
+  .footer__middle__container .footer {
+    margin: 10px auto;
+    min-width: 80;
+  }
+  .register{
+    margin: 25px auto;
+  }
+  .register .container {
+    width: auto;
+  }
+  .navbar-nav {
+    flex-direction: column;
+    width: 100%;
+  }
+  .navbar {
+    background-color: transparent;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+    margin: 0;
+    box-shadow: none;
+  }
+  .navbar-collapse{
+    background-color: var(--bg-header);
+    width: 100%;
+    height: 100%;
+  }
+  .dropdown-menu{
+    border: 0;
+  }
+  .dropdown-menu .menu-item{
+    border: 0;
+    border-bottom: 1px solid #e6e4e4;
+  }
+  .dropdown-menu .menu-item a{
+    text-align: center;
+  }
+  .menu__mobile{
+    background-color: transparent;
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .menu__mobile button{
+    font-size: 25px;
+  }
+}
+
+@media (min-width: 992px) {
+  .error-404 img {
+    max-width: 50%;
+  }
+}
+
+@media (min-width: 1200px) {
+  #main,
+  #footer {
+    margin-left: 300px;
+  }
+  .toggle-sidebar #main,
+  .toggle-sidebar #footer {
+    margin-left: 0;
+  }
+  .toggle-sidebar .sidebar {
+    left: -300px;
+  }
+  .logo {
+    width: 280px;
+  }
+}
+
+@media (max-width: 1199px) {
+  .toggle-sidebar .sidebar {
+    left: 0;
+  }
+  .sidebar {
+    left: -300px;
+  }
+  .header .search-bar {
+    position: fixed;
+    top: 50px;
+    left: 0;
+    right: 0;
+    padding: 20px;
+    box-shadow: 0px 0px 15px 0px rgba(1, 41, 112, 0.1);
+    background: var(--bg-header);
+    z-index: 9999;
+    transition: 0.3s;
+    visibility: hidden;
+    opacity: 0;
+  }
+  .header .search-bar-show {
+    top: 60px;
+    visibility: visible;
+    opacity: 1;
+  }
+  #main {
+    padding: 20px;
+  }
+}
+
+@media (min-width: 576px) {
+  .container {
+    max-width: 95%;
+    margin: 0 auto;
+  }
+}

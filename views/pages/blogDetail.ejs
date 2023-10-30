@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include ('../partials/head') %>
+    <link rel="stylesheet" href="/css/blogDetail.css" />
+  </head>
+  <body class="container">
+    <header><%- include ('../partials/header') %></header>
+    <main>
+      <div class="post__container">
+        
+        <!-- Page Features Image -->
+        <div class="post__img">
+          <img src="<%= data.img%>" alt="Anh <%= data.category %>" />
+          <div class="category">
+            <a href="#" title="View all posts in <%= data.category %>"><%= data.category %></a>
+          </div>
+        </div>
+        <!-- Page Title -->
+        <div class="text__post">
+          <span class="date"><%= data.date %></span>
+          <h2><%= data.title %></h2>
+        </div>
+        <!-- Page Content -->
+        <div class="content__post">
+          <div class="post__by">
+            Post by
+            <a href="#"><%= data.author %></a>
+          </div>
+          <div class="text">
+            <p>
+              <%= data.content %>
+            </p>
+          </div>
+        </div>
+        <!-- Page Social -->
+        <div class="social__post">
+          <a href="#">
+            <i class="fa-brands fa-facebook-f"></i>
+          </a>
+          <a href="#">
+            <i class="fa-brands fa-google-plus-g"></i>
+          </a>
+          <a href="#">
+            <i class="fa-brands fa-youtube"></i>
+          </a>
+          <a href="#">
+            <i class="fa-brands fa-linkedin"></i>
+          </a>
+          <a href="#">
+            <i class="fa-brands fa-gitlab"></i>
+          </a>
+        </div>
+        <!-- Page Navigation -->
+        <div class="navigation__post">
+          <div class="post__prev">
+            <img src="<%= data.imgFooter %>" alt="Anh <%= data.imgFooter %>" />
+            <a href="#" class="prev">
+              <span>
+                <i class="fa-solid fa-angle-left"></i> 
+                Previous Post
+              </span>
+              <span class="name__post"><%= data.title %></span>
+            </a>
+          </div>
+          <div class="next__post">
+            <a href="#" class="next">
+              <span>
+                Next Post
+                <i class="fa-solid fa-angle-right"></i> 
+              </span>
+              <span class="name__post"><%= data.title %></span>
+            </a>
+            <img src="<%= data.imgFooter %>" alt="<%= data.imgFooter %>" />
+          </div>
+        </div>
+        <!-- Page Author -->
+        <div class="author__post__container">
+          <div class="author__post">
+            <div class="author__img">
+              <img src="/img/avatar.png" alt="avatar author" />
+            </div>
+            <div class="author__info">
+              <p class="author__name">
+                <a href="#">andrea</a>
+              </p>
+              <p class="author-description">
+                Morbi gravida, sem non egestas ullamcorper, tellus ante laoreet
+                nisl, id iaculis urna eros vel turpis curabitur. Nullam
+                tristique massa faucibus, sodales sapien ac, tincidunt
+                dolor.
+              </p>
+              <p class="author-social">
+                <a href="#">
+                  <i class="fa-brands fa-facebook-f"></i>
+                </a>
+                <a href="#">
+                  <i class="fa-brands fa-twitter"></i>
+                </a>
+                <a href="#">
+                  <i class="fa-brands fa-youtube"></i>
+                </a>
+                <a href="#">
+                  <i class="fa-brands fa-google-plus-g"></i>
+                </a>
+                <a href="#">
+                  <i class="fa-brands fa-gitlab"></i>
+                </a>
+              </p>
+            </div>
+          </div>
+        </div>
+        <!-- Page Related -->
+        <div class="related__post">
+            <h2>Related Article</h2>
+            <div class="related__item__container">
+                <div class="related__item mt-4 me-2">
+                  <div class="related__img">
+                      <img src="<%= data.img %>" alt="Anh <%= data.category %>">
+                      <div class="category">
+                          <a href="#" title="View all posts in <%= data.category %>"><%= data.category %></a>
+                      </div>
+                  </div>
+                  <div class="related__text">
+                      <p class="related__date date"><%= data.date %></p>
+                      <p class="related__title"><a href="#"><%= data.title %></a></p>
+                  </div>
+                  <div class="related__author">
+                      Post by
+                      <a href="#"><%= data.author %></a>
+                  </div>
+                </div>
+            </div>
+        </div>
+        <!-- Page Comments -->  
+        <div class="comments__post">
+            <h3>0 Comments</h3>
+        </div>
+      
+      </div>
+    </main>
+
+    <footer><%- include ('../partials/footer',{ sharedData: sharedData }) %></footer>
+
+    <!-- Script main -->
+    <script src="/js/blogDetail.js"></script>
+  </body>
+</html>
