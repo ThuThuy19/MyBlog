@@ -32,6 +32,10 @@ const PostSchema = new Schema({
     imgFooter: {
         type: String,
         required: true,
+    },
+    __v: { 
+        type: Number,
+        select: false 
     }
 });
 export default mongoose.model("Post", PostSchema)

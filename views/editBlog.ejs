@@ -1,0 +1,86 @@
+<div class="form__AddBlog">
+  <h1 class="title__Function">Edit blog</h1>
+  <form action="/edit/<%= data._id %>?_method=PUT" method="POST">
+    <table>
+      <tr>
+        <td>ID new:</td>
+        <td><input type="hidden" name="id" id="id" /> <%= data._id %></td>
+      </tr>
+      <tr>
+        <td>Catgory:</td>
+        <td>
+          <input
+            type="text"
+            name="category"
+            id="category"
+            value="<%= data.category %>"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>Image:</td>
+        <td>
+          <input
+            class="img"
+            type="image"
+            name="image"
+            id="image"
+            src="<%= data.img %>"
+            alt="Anh <%= data.img %>"
+          />
+          <!-- <input type="file" name="" id="" class="img"> -->
+        </td>
+      </tr>
+      <tr>
+        <td>Date:</td>
+        <td>
+          <input
+            type="date"
+            name="date"
+            id="date"
+            value="<%= formattedDate %>"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>Title:</td>
+        <td>
+          <input
+            type="text"
+            name="title"
+            id="title"
+            value="<%= data.title %>"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>Author:</td>
+        <td>
+          <input
+            type="text"
+            name="author"
+            id="author"
+            value="<%= data.author %>"
+          />
+        </td>
+      </tr>
+      <tr>
+        <td>Short content:</td>
+        <td>
+          <textarea id="shortContent" name="shortContent" rows="4" cols="50"><%= data.shortContent %></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td>Content:</td>
+        <td>
+          <textarea id="content" name="content" rows="6" cols="80"><%= data.content %></textarea>
+        </td>
+      </tr>
+    </table>
+    <div class="submit">
+      <button type="submit" class="btn btn__Send">Send</button>
+      <button type="reset" class="btn btn__Send">Cancel</button>
+      <a href="/adminUI" class="btn btn__Send">Back</a>
+    </div>
+  </form>
+</div>

@@ -114,17 +114,3 @@ function confirmDelete() {
     alert("Không có sản phẩm nào bị xóa.");
   }
 }
-
-
-
-
-document.addEventListener('DOMContentLoaded', (event) => {
-  const editButtons = document.querySelectorAll('#btn__Edit');
-  
-  editButtons.forEach(button => {
-    button.addEventListener('click', function() {
-      const id = button.getAttribute('data-id');
-      window.location.href = `/admin/edit/${id}`;
-    });
-  });
-});

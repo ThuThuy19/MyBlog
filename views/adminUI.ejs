@@ -1,0 +1,54 @@
+<div class="pagetitle">
+  <h1>Dashboard</h1>
+  <nav>
+    <ol class="breadcrumb">
+      <li class="breadcrumb-item"><a href="/adminUI">Home</a></li>
+      <li class="breadcrumb-item active">Dashboard</li>
+    </ol>
+  </nav>
+</div>
+<!-- End Page Title -->
+
+<section class="section dashboard">
+  <!-- Add news -->
+  <a class="addBlog" href="/add">
+    <span class="add__text">
+      <i class="fa-solid fa-plus add__icon"></i>
+      Thêm
+    </span>
+  </a>
+
+  <!-- List news -->
+  <div class="blog__container">
+    <% data.forEach(function(blog) { %>
+    <div class="blog__item col-lg-4 col-sm-12 col-md-6">
+      <div class="blog__img">
+        <img src="<%= blog.img %>" alt="Anh <%= blog.img %>" />
+        <div class="category">
+          <a href="#" title="View all posts in <%= blog.category %>"><%= blog.category %></a>
+        </div>
+      </div>
+      <div class="blog__content">
+        <p class="blog__date date"><%= blog.date.toDateString() %></p>
+        <p class="blog__title"><%= blog.title %></p>
+        <p class="blog__author">Post by<a href="#"> <%= blog.author %></a></p>
+        <div class="function">
+          <button type="submit" class="btn btn__Edit" id="btn__Edit" data-id="<%= blog._id %>">
+            <a href="/edit/<%=blog._id%>">Sửa</a>
+          </button>
+          <button
+            type="submit"
+            class="btn btn__Delete"
+            id="btn__Delete"
+            onclick="confirmDelete()"
+          >
+            <a href="#">Xóa</a>
+          </button>
+        </div>
+      </div>
+    </div>
+    <% }); %>
+  </div>
+</section>
+
+

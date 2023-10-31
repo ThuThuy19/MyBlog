@@ -3,11 +3,13 @@ import routes from "./server/routes/routes.js";
 import expressEjsLayouts from "express-ejs-layouts";
 import connectDB from "./server/config/connectDB.js";
 const app = express();
-const port = process.env.port || 50;
+const port = process.env.port || 8080;
 import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
 import session from "express-session";
 import methodOverride from "method-override";
+import Post from "./server/models/Post.js";
+import Categories from "./server/models/Categories.js";
 
 
 // set the view engine to ejs
@@ -31,13 +33,15 @@ app.use(methodOverride("_method"));
 
 //ejs setup
 app.use(expressEjsLayouts)  
-app.set("views", "views/pages")
+
+app.set("layout" , "views/index")
 
 app.set('view engine' , 'ejs');
+
 
 //create routes
 app.use(routes)
 
-app.listen(port, () => {
+app.listen(port,'0.0.0.0', () => {
   console.log(`Server is running on port ${port}`);
 });
