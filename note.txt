@@ -4,6 +4,7 @@ npm install mongodb --save
 post
 	id
 	title 
+	category
 	date   
 	short content
 	content  
@@ -33,9 +34,24 @@ username: thuynttoneadx
 pass: Thuy.oneadx
 
 
-mongodb+srv://thuynttoneadx:Thuy.oneadx@cluster0.9p4wxb9.mongodb.net/BlogManagement?retryWrites=true&w=majority
 
 
-
-(https://www.youtube.com/watch?v=GfnTTpTgsBY)
-(https://github.com/CODE-LY-CODE-HANH/Share_source_code/blob/master/server_node_js/bai9/client/App.js)
+<!-- Search theo seo -->
+<!-- <% data.forEach(blog => { %>
+<div class="search">
+  <form action="/search/<%= seoURL(blog.title) %>" method="post" role="search">
+    <div class="form-group-search">
+      <input
+        id="s"
+        type="text"
+        class="search-field"
+        name="searchTerm"
+        placeholder="Search and hit enter..."
+      />
+      <button type="submit" class="search-btn" name="submit">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+    </div>
+  </form>
+</div>
+<% }); %> -->

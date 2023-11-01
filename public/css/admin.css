@@ -23,6 +23,7 @@ body {
   background-size: cover 100%;
   color: var(--font-color-default);
   min-height: 100vh;
+  position: relative;
 }
 
 a {
@@ -397,7 +398,7 @@ h6 {
   opacity: 1;
 }
 .blog__container {
-  margin: 10px 0;
+  margin: 10px 0 100px 0;
   display: flex;
   flex-wrap: wrap;
   justify-content: space-evenly;
@@ -581,6 +582,10 @@ h6 {
   font-size: 14px;
   transition: all 0.3s;
   border-top: 1px solid #cddfff;
+  position: absolute;
+  bottom: 0;
+  left: 40%;
+  transform: translate(-40%,0);
 }
 
 .footer .copyright {

@@ -37,3 +37,16 @@ function loadHeader() {
 window.addEventListener("scroll", loadHeader);
 
 
+// function submitSearch() {
+//   const searchTerm = document.getElementById('s').value;
+//   const searchForm = document.getElementById('searchForm');
+  
+//   // Replace whitespace in the search term with hyphens to create a SEO-friendly URL
+//   // const seoFriendlyTerm = searchTerm.replace(/\s+/g, '-');
+
+//   searchForm.action = `/search/${seoFriendlyTerm}`;
+//   searchForm.submit();
+// }
+
+
+

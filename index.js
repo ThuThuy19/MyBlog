@@ -39,6 +39,12 @@ app.set("layout" , "views/index")
 app.set('view engine' , 'ejs');
 
 
+// app.use(session({
+//   secret: 'yourSecretKey', // Chuỗi bí mật để ký và mã hóa session ID
+//   resave: false,
+//   saveUninitialized: true,
+// }));
+
 //create routes
 app.use(routes)
 

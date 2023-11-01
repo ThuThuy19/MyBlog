@@ -105,35 +105,33 @@
   }
 })();
 
-
-document.addEventListener("DOMContentLoaded", (event) => {
+document.addEventListener("DOMContentLoaded", () => {
   const deleteButtons = document.querySelectorAll("#btn__Delete");
-  deleteButtons.forEach((button) => {
-    button.addEventListener("click", function () {
-      const id = button.getAttribute("data-id");
-      const postElement = document.querySelector(`#post_${id}`);
 
-      if (confirm("Are you sure you want to delete this post?")) {
-        fetch(`/delete/${id}`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            // Add any other headers your server requires here
-          },
-        })
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.success) {
-              alert("Post deleted successfully!");
-              postElement.remove(); // Removes the post element from the DOM
-            } else {
-              alert("Failed to delete post. Please try again.");
-            }
-          })
-          .catch((error) => {
-            console.error("Error deleting post:", error);
-            alert("Failed to delete post. Please try again.");
+  deleteButtons.forEach((button) => {
+    button.addEventListener("click", async (event) => {
+      event.preventDefault();
+      const postId = button.getAttribute("data-id");
+
+      if (confirm("Bạn có chắc muốn xóa bài đăng này?")) {
+        try {
+          const response = await fetch(`/delete/${postId}`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
           });
+
+          if (response.ok) {
+            alert("Bài đăng đã được xóa thành công");
+            location.reload();
+          } else {
+            alert("Lỗi xóa bài đăng");
+          }
+        } catch (error) {
+          console.error("Lỗi xóa bài đăng:", error);
+          alert("Lỗi xóa bài đăng");
+        }
       }
     });
   });

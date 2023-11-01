@@ -1,178 +1,194 @@
+<!-- Swipper -->
 
+<!-- Slider main container -->
 
-        <!-- Swipper -->
+<div class="swiper">
+  <!-- Additional required wrapper -->
+  <div class="swiper-wrapper">
+    <!-- Slides -->
+    <div class="swiper-slide">
+      <img src="<%=Setup.img_slider[0] %>" alt="Anh slide 1" />
+      <div class="content">
+        <h3><%=Setup.title_slider%></h3>
+        <h6>
+          Lorem ipsum dolor
+          <p style="color: #9c8156; display: inline-block">
+            sit amet consectetur adipisicing
+          </p>
+          elit. Facilis, dolorum?
+        </h6>
+        <a href="#" class="btn btn-readmore">Read More</a>
+      </div>
+    </div>
+    <div class="swiper-slide">
+      <img src="<%=Setup.img_slider[1] %>" alt="Anh slide 2" />
+      <div class="content">
+        <h3><%=Setup.title_slider%></h3>
+        <h6>
+          Lorem ipsum dolor
+          <p style="color: #9c8156; display: inline-block">
+            sit amet consectetur adipisicing
+          </p>
+          elit. Facilis, dolorum?
+        </h6>
+        <a href="#" class="btn btn-readmore">Read More</a>
+      </div>
+    </div>
+    <div class="swiper-slide">
+      <img src="<%=Setup.img_slider[2] %>" alt="Anh slide 3" />
+      <div class="content">
+        <h3><%=Setup.title_slider%></h3>
+        <h6>
+          Lorem ipsum dolor
+          <p style="color: #9c8156; display: inline-block">
+            sit amet consectetur adipisicing
+          </p>
+          elit. Facilis, dolorum?
+        </h6>
+        <a href="#" class="btn btn-readmore">Read More</a>
+      </div>
+    </div>
+  </div>
+  <!-- If we need pagination -->
+  <div class="swiper-pagination"></div>
 
-        <!-- Slider main container -->
-        <div class="swiper">
-          <!-- Additional required wrapper -->
-          <div class="swiper-wrapper">
-            <!-- Slides -->
-            <div class="swiper-slide">
-              <img src="/img/image-slider-1-1.jpg" alt="Anh slide 1">
-              <div class="content">
-                <h3>FUSCE FERMENTUM NISI</h3>
-                <h6>Lorem ipsum dolor 
-                  <p style="color: #9c8156; display: inline-block;">sit amet consectetur adipisicing</p>
-                  elit. Facilis, dolorum?</h6>
-                <a href="#" class="btn btn-readmore">Read More</a>
-              </div>
-            </div>
-            <div class="swiper-slide">
-              <img src="/img/image-slider-2.jpg" alt="Anh slide 2">
-              <div class="content">
-                <h3>FUSCE FERMENTUM NISI</h3>
-                <h6>Lorem ipsum dolor 
-                  <p style="color: #9c8156; display: inline-block;">sit amet consectetur adipisicing</p>
-                  elit. Facilis, dolorum?</h6>
-                <a href="#" class="btn btn-readmore">Read More</a>
-              </div>
-            </div>
-            <div class="swiper-slide">
-              <img src="/img/image-slider-3.jpg" alt="Anh slide 3">
-              <div class="content">
-                <h3>FUSCE FERMENTUM NISI</h3>
-                <h6>Lorem ipsum dolor 
-                  <p style="color: #9c8156; display: inline-block;">sit amet consectetur adipisicing</p>
-                  elit. Facilis, dolorum?</h6>
-                <a href="#" class="btn btn-readmore">Read More</a>
-              </div>
-            </div>
-          </div>
-          <!-- If we need pagination -->
-          <div class="swiper-pagination"></div>
+  <div class="custom-button-prev">Previous</div>
+  <div class="custom-button-next">Next</div>
+</div>
 
-          <div class="custom-button-prev">Previous</div>
-          <div class="custom-button-next">Next</div>
+<!-- List blog -->
+<section class="content-container row">
+  <!-- content -->
+  <div class="content col-8 col-xs-8" id="content">
+    <% data.forEach(blog => { %>
+    <div class="content__item">
+      <div class="post__img">
+        <img src="<%= blog.img %>" alt="Anh <%= blog.category %>" />
+        <div class="category">
+          <a
+            href="/blog/<%= blog._id%>"
+            title="View all posts in <%= blog.category %>"
+            ><%= blog.category %></a
+          >
         </div>
-        <!-- List blog -->
-        <section class="content-container row">
-          <!-- content -->
-          <div class="content col-8 col-xs-8" id="content">
-            <% data.forEach(blog => { %>
-            <div class="content__item">
-              <div class="post__img">
-                <img src="<%= blog.img %>" alt="Anh <%= blog.category %>">
-                <div class="category">
-                  <a href="/blog/<%= blog._id%>" title="View all posts in <%= blog.category %>"><%= blog.category %></a>
-                </div> 
-              </div>
-              <div class="post__text">
-                <span class="date"><%= blog.date.toDateString() %></span>
-                <h3><a href="/blog/<%= blog._id%>"><%= blog.title %></a></h3>
-                <p class="text"><%= blog.shortContent %></p>
-              </div>
-              <div class="post__info">
-                <div class="post__by">
-                  Post by
-                  <a href="#"><%= blog.author %></a>
-                </div>
-                <div class="extra__info">
-                  <a href="#" target="_blank">
-                    <i class="fa-brands fa-twitter"></i>
-                  </a>
-                  <span class="comment">
-                    0
-                    <i class="fa-regular fa-comment"></i>
-                  </span>
-                </div>
-              </div>
-            </div>
-            <% }); %>
+      </div>
+      <div class="post__text">
+        <span class="date"><%= blog.date.toDateString() %></span>
+        <h3>
+          <a href="/blog/<%= blog._id %>/<%= seoURL(blog.title) %>"
+            ><%= blog.title %></a
+          >
+        </h3>
+        <p class="text"><%= blog.shortContent %></p>
+      </div>
+      <div class="post__info">
+        <div class="post__by">
+          Post by
+          <a href="#"><%= blog.author %></a>
+        </div>
+        <div class="extra__info">
+          <a href="#" target="_blank">
+            <i class="fa-brands fa-twitter"></i>
+          </a>
+          <span class="comment">
+            0
+            <i class="fa-regular fa-comment"></i>
+          </span>
+        </div>
+      </div>
+    </div>
+    <% }); %>
 
-            <div class="navigation nav-numeric">
-              <ul>
-                <li class="active">
-                  <a href="#">1</a>
-                </li>
-                <li>
-                  <a href="#">2</a>
-                </li>
-                <li>
-                  <a href="#">3</a>
-                </li>
-                <li>
-                  <a href="#">Next page</a>
-                </li>
-              </ul>
-            </div>
+    <div class="navigation nav-numeric">
+      <ul>
+        <% for (let i = 1; i <= countPages; i++) { %>
+        <li>
+          <a href="/?page=<%= i %>"><%= i %></a>
+        </li>
+        <% } %> <% if (nextPage === null) { %>
+        <li>
+          <a href="/?page=<%= nextPage %>">&lt; View Older Posts</a>
+        </li>
+        <% } %>
+      </ul>
+    </div>
+  </div>
+  <!-- slide bar -->
+  <div class="sidebar col-4 col-xs-4" id="sidebar">
+    <div class="widget widget__author">
+      <div class="author__image">
+        <img src="/img/about-me.jpg" alt="Anh about me" />
+        <div class="author__title">About Author</div>
+      </div>
+      <div class="author__text">
+        <p>
+          Lorem ipsum dolor sit consectetur adipisicing elit, sed do eiusmod
+          tempor incididunt ut labore et dolore.
+        </p>
+        <span class="signing">
+          <img src="<%=Setup.img_signing %>" alt="Chu ky" />
+        </span>
+      </div>
+    </div>
 
+    <div class="widget widget__advertising">
+      <div class="advertising__container">
+        <a href="#" class="button-readmore">
+          <img src="<%=Setup.img_advertising %>" alt="Anh quang cao" />
+          <div class="advertising__text">
+            <p>Advertising</p>
           </div>
-          <!-- slide bar -->
-          <div class="sidebar col-4 col-xs-4" id="sidebar">
-            <div class="widget widget__author">
-              <div class="author__image">
-                <img src="/img/about-me.jpg" alt="Anh about me">
-                <div class="author__title">About Author</div>
-              </div>
-              <div class="author__text">
-                <p>Lorem ipsum dolor sit consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore.</p>
-                <span class="signing">
-                  <img src="/img/signing.png" alt="Chu ky">
-                </span>
-              </div>
-            </div>
+        </a>
+      </div>
+    </div>
 
-            <div class="widget widget__advertising">
-              <div class="advertising__container">
-                <a href="#" class="button-readmore">
-                  <img src="/img/advertising.jpg" alt="Anh quang cao">
-                  <div class="advertising__text">
-                    <p>Advertising</p>
-                  </div>
-                </a>
-              </div>
-            </div>
-
-            <div class="widget widget__latest__post">
-              <h3 class="widget__title">Latest post</h3>
-              <div class="latest__post__content">
-                <% data.forEach(function(blog) { %>
-                <div class="latest__post__item row">
-                  <img src="<%= blog.img %>" alt="Anh latest post" class="col-4">
-                  <div class="info__post col-8">
-                    <h5>
-                      <a href="<%= blog._id %>" title="<%= blog.title %>"><%= blog.title %></a>
-                    </h5>
-                    <span class="date"><%= blog.date.toDateString() %></span>
-                  </div>
-                </div>
-                <% }); %>
-              </div>
-            </div>
-
-            <div class="widget widget__social">
-              <h3 class="widget__title">Social</h3>
-              <div class="follow-container">
-                <a href="#">
-                  <i class="fa-brands fa-facebook-f"></i>
-                </a>
-                <a href="#">
-                  <i class="fa-brands fa-google-plus-g"></i>
-                </a>
-                <a href="#">
-                  <i class="fa-brands fa-youtube"></i>
-                </a>
-                <a href="#">
-                  <i class="fa-brands fa-linkedin"></i>
-                </a>
-                <a href="#">
-                  <i class="fa-brands fa-gitlab"></i>
-                </a>
-              </div>
-            </div>
-
-            <div class="widget widget__tag">
-              <h3 class="widget__title">Tags</h3>
-              <div class="tag__cloud">
-                <% category.forEach(function(cat) { %>
-                <a href="#"><%= cat.name %></a>
-                <% }); %>
-              </div>
-            </div>
+    <div class="widget widget__latest__post">
+      <h3 class="widget__title">Latest post</h3>
+      <div class="latest__post__content">
+        <% data.forEach(function(blog) { %>
+        <div class="latest__post__item row">
+          <img src="<%= blog.img %>" alt="Anh latest post" class="col-4" />
+          <div class="info__post col-8">
+            <h5>
+              <a href="<%= blog._id %> " title="<%= blog.title %>"
+                ><%= blog.title %></a
+              >
+            </h5>
+            <span class="date"><%= blog.date.toDateString() %></span>
           </div>
+        </div>
+        <% }); %>
+      </div>
+    </div>
 
-        </section>
+    <div class="widget widget__social">
+      <h3 class="widget__title">Social</h3>
+      <div class="follow-container">
+        <a href="#">
+          <i class="fa-brands fa-facebook-f"></i>
+        </a>
+        <a href="#">
+          <i class="fa-brands fa-google-plus-g"></i>
+        </a>
+        <a href="#">
+          <i class="fa-brands fa-youtube"></i>
+        </a>
+        <a href="#">
+          <i class="fa-brands fa-linkedin"></i>
+        </a>
+        <a href="#">
+          <i class="fa-brands fa-gitlab"></i>
+        </a>
+      </div>
+    </div>
 
-
-      
-
+    <div class="widget widget__tag">
+      <h3 class="widget__title">Tags</h3>
+      <div class="tag__cloud">
+        <% category.forEach(function(cat) { %>
+        <a href="#"><%= cat.name %></a>
+        <% }); %>
+      </div>
+    </div>
+  </div>
+</section>

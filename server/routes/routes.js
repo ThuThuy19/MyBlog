@@ -7,8 +7,10 @@ import jwt from "jsonwebtoken";
 const routes = express.Router();
 const jwtSecret = "BlogManagement";
 import mongoose from "mongoose";
+import session from "express-session";
 import { render } from "ejs";
-// import Setup from '../../setup.json'
+import Setup from "../../setup.js";
+// const Setup = require("../../setup.json");
 
 async function fetchData() {
   try {
@@ -25,6 +27,7 @@ routes.use(async (req, res, next) => {
     const sharedData = await fetchData();
     // Gán dữ liệu vào res.locals
     res.locals.sharedData = sharedData;
+    res.locals.Setup = Setup;
     next();
   } catch (error) {
     console.error(error);
@@ -37,8 +40,8 @@ routes.use(async (req, res, next) => {
 routes.get("/", async (req, res) => {
   try {
     const locals = {
-      // title: Setup.title,
-      title: "My blog",
+      title: Setup.title,
+      // title: "My blog",
     };
     let perPage = 6;
     let page = req.query.page || 1;
@@ -46,21 +49,31 @@ routes.get("/", async (req, res) => {
       .skip(perPage * page - perPage)
       .limit(perPage)
       .exec();
-    const category = await Categories.aggregate([{ $sort: { date: -1 } }])
-      .skip(perPage * page - perPage)
-      .limit(perPage)
-      .exec();
+    const category = await Categories.find();
     const count = await Post.count();
     const nextPage = parseInt(page) + 1;
     const hasNextPage = nextPage <= Math.ceil(count / perPage);
+    const countPages = Math.ceil(count / perPage);
+
+    // Tạo slug từ tiêu đề để tạo URL SEO-friendly
+    const seoURL = (title) => {
+      return title
+        .toLowerCase()
+        .replace(/[^a-z0-9 -]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .substring(0, 75);
+    };
 
     res.render("index", {
       layout: "pages/main",
       locals,
       data,
+      countPages,
       category,
       current: page,
       nextPage: hasNextPage ? nextPage : null,
+      seoURL,
     });
   } catch (error) {
     console.log(error);
@@ -98,7 +111,7 @@ routes.post("/search", async (req, res) => {
 });
 
 // Detail blog
-routes.get("/blog/:id", async (req, res) => {
+routes.get("/blog/:id/:seoURL", async (req, res) => {
   try {
     let slug = req.params.id;
     const isValidObjectId = mongoose.Types.ObjectId.isValid(slug);
@@ -107,6 +120,7 @@ routes.get("/blog/:id", async (req, res) => {
       const locals = {
         title: data.title,
       };
+
       res.render("./blogDetail", { layout: "pages/main", locals, data });
     }
   } catch (error) {
@@ -118,29 +132,30 @@ routes.get("/blog/:id", async (req, res) => {
 // Login
 routes.get("/login", async (req, res) => {
   try {
-    res.render("./login", {layout: "pages/login"});
+    res.render("./login", { layout: "pages/login" });
   } catch (error) {
     console.log(error);
   }
 });
 
-routes.post('/login', async (req, res) => {
+routes.post("/login", async (req, res) => {
   try {
     const username = req.body.username;
     const password = req.body.password;
 
     const user = await User.findOne({ username });
-    if ( user || (await bcrypt.compare(password, user.password))) {
-      const token = jwt.sign({ userId: user._id }, 'yourSecretKey');
+    if (user || (await bcrypt.compare(password, user.password))) {
+      const token = jwt.sign({ userId: user._id }, "yourSecretKey");
       // Send token in cookie
-      res.cookie('token', token, { httpOnly: true });
-      res.redirect('./adminUI');
+      // req.session.userId = user._id;
+      res.cookie("token", token, { httpOnly: true });
+      res.redirect("./adminUI");
     } else {
-      res.status(401).send('Invalid username or password');
+      res.status(401).send("Invalid username or password");
     }
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error occurred during login');
+    res.status(500).send("Error occurred during login");
   }
 });
 
@@ -148,26 +163,25 @@ routes.post('/login', async (req, res) => {
 const authMiddleware = function verifyToken(req, res, next) {
   const token = req.cookies.token; // Get token from cookie
   if (!token) {
-    return res.redirect('./login');
+    return res.redirect("./login");
   }
   try {
     // decode token
-    const decoded = jwt.verify(token, 'yourSecretKey');
+    const decoded = jwt.verify(token, "yourSecretKey");
     // Save userId from token to request to use other route
     req.userId = decoded.userId;
     next();
   } catch (error) {
-    return res.status(403).send('Invalid or expired token');
+    return res.status(403).send("Invalid or expired token");
   }
-}
+};
 
 // Route admin - just redirect if login success
-routes.get('/adminUI', authMiddleware, async (req, res) => {
-  try{
+routes.get("/adminUI", authMiddleware, async (req, res) => {
+  try {
     const data = await Post.find();
-    res.render('./adminUI', {data, layout: "pages/admin"});
-  }
-  catch (error){
+    res.render("./adminUI", { data, layout: "pages/admin" });
+  } catch (error) {
     console.log(error);
   }
 });
@@ -178,20 +192,31 @@ routes.get("/edit/:id", authMiddleware, async (req, res) => {
     console.log("data " + data);
     if (data) {
       const date = data.date;
-      const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+      const formattedDate = `${date.getFullYear()}-${String(
+        date.getMonth() + 1
+      ).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
       res.render("./editBlog", { layout: "pages/admin", data, formattedDate });
     } else {
-      res.status(404).send('Data not found');
+      res.status(404).send("Data not found");
     }
   } catch (error) {
     console.log(error);
-    res.status(500).send('Internal Server Error');
+    res.status(500).send("Internal Server Error");
   }
 });
 
-routes.put('/edit/:id', authMiddleware, async(req, res) => {
+routes.put("/edit/:id", authMiddleware, async (req, res) => {
   try {
-    const { title,date, category,shortContent,content,author, img, imgFooter } = req.body;
+    const {
+      title,
+      date,
+      category,
+      shortContent,
+      content,
+      author,
+      img,
+      imgFooter,
+    } = req.body;
     if (!date) {
       return res.status(400).send("Date is required");
     }
@@ -205,32 +230,31 @@ routes.put('/edit/:id', authMiddleware, async(req, res) => {
         content,
         author,
         img,
-        imgFooter
+        imgFooter,
       },
       { new: true }
     );
-        if (!updatedPost) {
-          return res.status(404).send("Post not found");
-        }
+    if (!updatedPost) {
+      return res.status(404).send("Post not found");
+    }
     res.redirect(`/edit/${req.params.id}`);
   } catch (error) {
-    console.log(error)
-     res.status(500).send("Server Error");
+    console.log(error);
+    res.status(500).send("Server Error");
   }
-})
+});
 
-routes.get("/add",authMiddleware, async (req, res) => {
-  try{
-    res.render("./addBlog",{layout: "pages/admin"});
-  }
-  catch(error){
+routes.get("/add", authMiddleware, async (req, res) => {
+  try {
+    res.render("./addBlog", { layout: "pages/admin" });
+  } catch (error) {
     console.log(error);
   }
 });
 
-routes.post("/add", authMiddleware,async (req, res) => {
+routes.post("/add", authMiddleware, async (req, res) => {
   try {
-    console.log(req.body)
+    console.log(req.body);
     try {
       const newPost = new Post({
         title: req.body.title,
@@ -238,12 +262,12 @@ routes.post("/add", authMiddleware,async (req, res) => {
         category: req.body.category,
         shortContent: req.body.shortContent,
         content: req.body.content,
-        author : req.body.author,
+        author: req.body.author,
         img: "/img/travel1.jpg",
-        imgFooter: "/img/travel1.jpg"
-      })
-      await Post.create(newPost)
-       res.redirect('./adminUI')
+        imgFooter: "/img/travel1.jpg",
+      });
+      await Post.create(newPost);
+      res.redirect("./adminUI");
     } catch (error) {
       console.log(error);
     }
@@ -257,7 +281,7 @@ routes.get("/register", async (req, res) => {
     res.render("./register", { layout: "pages/login" });
   } catch (error) {
     console.log(error);
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
@@ -266,9 +290,9 @@ routes.post("/register", async (req, res) => {
     const { name, email, username, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    const user = await User.create({ 
+    const user = await User.create({
       username: username,
-      password:hashedPassword,
+      password: hashedPassword,
       role: 0,
       fullname: name,
       email: email,
@@ -277,16 +301,17 @@ routes.post("/register", async (req, res) => {
       country: "Viet Nam",
       address: "TP Ho Chi Minh",
       phone: "123654987",
-      about: "Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde." 
+      about:
+        "Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.",
     });
-    res.render("./adminUI", { layout: "pages/login" })
+    res.redirect("/adminUI");
     // res.status(201).json({ message: 'User created', user });
   } catch (error) {
     console.log(error);
     if (error.code === 11000) {
-      return res.status(409).json({ message: 'User already in use' });
+      return res.status(409).json({ message: "User already in use" });
     }
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: "Internal server error" });
   }
 });
 
@@ -297,67 +322,77 @@ routes.post("/delete/:id", async (req, res) => {
     const result = await Post.findByIdAndRemove(postId);
 
     if (!result) {
-      return res.status(404).json({ success: false, message: "Post not found" });
+      return res
+        .status(404)
+        .json({ success: false, message: "Bai dang khong ton tai" });
     }
 
-    res.json({ success: true, message: "Post deleted successfully" });
-    res.redirect('/adminUI');
-
+    // res.json({ success: true, message: "Xoa thanh cong" });
+    res.redirect("/adminUI");
   } catch (error) {
-    console.error("Error deleting post:", error);
-    res.status(500).json({ success: false, message: "Internal server error" });
+    console.error("Loi:", error);
+    res.status(500).json({ success: false, message: "Loi may chu noi bo" });
   }
 });
 
-// routes.get('/change-password', (req, res) => {
-//   res.render('changePassword');
-// });
+routes.get("/users-profile", (req, res) => {
+  res.render("./profiles", { layout: "pages/users-profile" });
+});
 
-// routes.post('/change-password', async (req, res) => {
+routes.get("/changePassword", async (req, res) => {
+  const data = await User.findById({ _id: req.session.userId });
+  res.render("./changePassword", { layout: "pages/users-profile" });
+});
+
+// routes.post('/changePassword', async (req, res) => {
 //   try {
-//     const { currentPassword, newPassword, renewpassword } = req.body;
+//     const { password, newpassword, renewpassword } = req.body;
 
+//     console.log("pass " + password);
+//     console.log("newpassword " + newpassword);
+//     console.log("renewpassword " + renewpassword);
+//     console.log(newpassword !== renewpassword);
 //     // check newPassword like renewpassword
-//     if (newPassword !== renewpassword) {
-//       return res.render('changePassword', {
+//     if (newpassword !== renewpassword) {
+//       return res.render('./changePassword', {
 //         error: 'New password and confirm password do not match',
 //       });
 //     }
+//     const user = await User.findOne({ _id: req.User._id });
+//     console.log("user: " +   user);
 
-//     const user = await User.findOne({ _id: req.user._id }); // Giả sử thông tin user được lưu trong session
-
-//     const isPasswordValid = await bcrypt.compare(currentPassword, user.password);
+//     const isPasswordValid = await bcrypt.compare(password, user.password);
 
 //     if (!isPasswordValid) {
-//       return res.render('changePassword', { error: 'Current password is incorrect' });
+//       return res.render('./changePassword', { error: 'Current password is incorrect' });
 //     }
-
 //     // hashcode new password
-//     const hashedPassword = await bcrypt.hash(newPassword, 10);
+//     const hashedPassword = await bcrypt.hash(newpassword, 10);
 
 //     // update new password to db
 //     user.password = hashedPassword;
 //     await user.save();
-
-//     res.render('changePassword', { success: 'Password changed successfully' });
+//     res.redirect('./login');
+//     // res.render('./changePassword', { success: 'Password changed successfully',layout: "pages/users-profile" });
 //   } catch (error) {
 //     console.error('Error changing password:', error);
-//     res.render('Admin/changePassword', { error: 'Internal server error' });
+//     res.render('./changePassword', { error: 'Internal server error' });
 //   }
 // });
 
-// //Edit profile
-// routes.get('/edit-profile', authMiddleware, async (req, res) => {
-//   try {
-//     // get user from session
-//     const user = await User.findOne({ _id: req.user._id });
+//Edit profile
+routes.get("/edit-profile", authMiddleware, async (req, res) => {
+  try {
+    // get user from session
+    // const user = await User.findOne({ _id: req.user._id });
 
-//     res.render('Admin/editProfile', { layout: 'users-profile', user });
-//   } catch (error) {
-//     console.error('Error fetching user profile:', error);
-//     res.status(500).send('Internal server error');
-//   }
-// });
+    // res.render('./edit-profile', { layout: 'pages/users-profile', user });
+    res.render("./edit-profile", { layout: "pages/users-profile" });
+  } catch (error) {
+    console.error("Error fetching user profile:", error);
+    res.status(500).send("Internal server error");
+  }
+});
 
 // routes.post('/edit-profile', authMiddleware, async (req, res) => {
 //   try {
@@ -384,6 +419,15 @@ routes.post("/delete/:id", async (req, res) => {
 //     res.status(500).send('Internal server error');
 //   }
 // });
+
+routes.get("/logout", (req, res) => {
+  req.session.destroy((err) => {
+    if (err) {
+      console.error(err);
+    }
+    res.redirect("/login");
+  });
+});
 
 export default routes;
 
@@ -528,5 +572,5 @@ export default routes;
 //         decription: "technology"
 //       }
 //     ])
-  // }
-  // insertPostData();
+// }
+// insertPostData();
