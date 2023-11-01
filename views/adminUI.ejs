@@ -33,16 +33,16 @@
         <p class="blog__title"><%= blog.title %></p>
         <p class="blog__author">Post by<a href="#"> <%= blog.author %></a></p>
         <div class="function">
-          <button type="submit" class="btn btn__Edit" id="btn__Edit" data-id="<%= blog._id %>">
+          <button type="submit" class="btn btn__Edit" id="btn__Edit">
             <a href="/edit/<%=blog._id%>">Sửa</a>
           </button>
           <button
             type="submit"
             class="btn btn__Delete"
             id="btn__Delete"
-            onclick="confirmDelete()"
+            data-id = "<%=blog._id%>"
           >
-            <a href="#">Xóa</a>
+            <a href="/delete/<%=blog._id%>">Xóa</a>
           </button>
         </div>
       </div>

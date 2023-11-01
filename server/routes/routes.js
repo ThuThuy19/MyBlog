@@ -118,7 +118,7 @@ routes.get("/blog/:id", async (req, res) => {
 // Login
 routes.get("/login", async (req, res) => {
   try {
-    res.render("./login", {layout: "login"});
+    res.render("./login", {layout: "pages/login"});
   } catch (error) {
     console.log(error);
   }
@@ -254,44 +254,60 @@ routes.post("/add", authMiddleware,async (req, res) => {
 
 routes.get("/register", async (req, res) => {
   try {
-    res.render("register", { layout: "login" });
+    res.render("./register", { layout: "pages/login" });
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
 
-// routes.post("/register", async (req, res) => {
-//   try {
-//     const { name, email, username, password } = req.body;
-//     const hashedPassword = await bcrypt.hash(password, 10);
+routes.post("/register", async (req, res) => {
+  try {
+    const { name, email, username, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-//     const user = await User.create({ name, email, username, password: hashedPassword });
-//     res.status(201).json({ message: 'User created', user });
-//   } catch (error) {
-//     console.log(error);
-//     if (error.code === 11000) {
-//       return res.status(409).json({ message: 'User already in use' });
-//     }
-//     res.status(500).json({ message: 'Internal server error' });
-//   }
-// });
+    const user = await User.create({ 
+      username: username,
+      password:hashedPassword,
+      role: 0,
+      fullname: name,
+      email: email,
+      company: "Cong ty TNHH OneADX",
+      job: "Developer",
+      country: "Viet Nam",
+      address: "TP Ho Chi Minh",
+      phone: "123654987",
+      about: "Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde." 
+    });
+    res.render("./adminUI", { layout: "pages/login" })
+    // res.status(201).json({ message: 'User created', user });
+  } catch (error) {
+    console.log(error);
+    if (error.code === 11000) {
+      return res.status(409).json({ message: 'User already in use' });
+    }
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
-// routes.post("/admin/delete/:id", async (req, res) => {
-//   try {
-//     const postId = req.params.id;
-//     const result = await Post.findByIdAndRemove(postId);
+routes.post("/delete/:id", async (req, res) => {
+  try {
+    const postId = req.params.id;
+    console.log(postId);
+    const result = await Post.findByIdAndRemove(postId);
 
-//     if (!result) {
-//       return res.status(404).json({ success: false, message: "Post not found" });
-//     }
+    if (!result) {
+      return res.status(404).json({ success: false, message: "Post not found" });
+    }
 
-//     res.json({ success: true, message: "Post deleted successfully" });
-//   } catch (error) {
-//     console.error("Error deleting post:", error);
-//     res.status(500).json({ success: false, message: "Internal server error" });
-//   }
-// });
+    res.json({ success: true, message: "Post deleted successfully" });
+    res.redirect('/adminUI');
+
+  } catch (error) {
+    console.error("Error deleting post:", error);
+    res.status(500).json({ success: false, message: "Internal server error" });
+  }
+});
 
 // routes.get('/change-password', (req, res) => {
 //   res.render('changePassword');

@@ -105,12 +105,36 @@
   }
 })();
 
-function confirmDelete() {
-  var result = window.confirm("Bạn có chắc chắn muốn xóa sản phẩm này?");
 
-  if (result) {
-    alert("Sản phẩm đã bị xóa.");
-  } else {
-    alert("Không có sản phẩm nào bị xóa.");
-  }
-}
+document.addEventListener("DOMContentLoaded", (event) => {
+  const deleteButtons = document.querySelectorAll("#btn__Delete");
+  deleteButtons.forEach((button) => {
+    button.addEventListener("click", function () {
+      const id = button.getAttribute("data-id");
+      const postElement = document.querySelector(`#post_${id}`);
+
+      if (confirm("Are you sure you want to delete this post?")) {
+        fetch(`/delete/${id}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // Add any other headers your server requires here
+          },
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              alert("Post deleted successfully!");
+              postElement.remove(); // Removes the post element from the DOM
+            } else {
+              alert("Failed to delete post. Please try again.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error deleting post:", error);
+            alert("Failed to delete post. Please try again.");
+          });
+      }
+    });
+  });
+});
