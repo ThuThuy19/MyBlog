@@ -55,3 +55,85 @@ pass: Thuy.oneadx
   </form>
 </div>
 <% }); %> -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="form__AddBlog">
+
+  <h1 class="title__Function">Add blog</h1>
+  <form action="/add" method="post">
+    <table>
+      <tr>
+        <td>Catgory:</td>
+        <td><input type="text" name="category" id="category" /></td>
+      </tr>
+      <tr>
+        <td>Image:</td>
+        <td>
+          <input
+            class="img"
+            type="image"
+            name="image"
+            id="image"
+            src="/img/travel1.jpg"
+            alt="Anh travel"
+          />
+          <!-- <input type="file" name="" id="" class="img"> -->
+        </td>
+      </tr>
+      <tr>
+        <td>Date:</td>
+        <td><input type="date" name="date" id="date" /></td>
+      </tr>
+      <tr>
+        <td>Title:</td>
+        <td><input type="text" name="title" id="title" /></td>
+      </tr>
+      <tr>
+        <td>Author:</td>
+        <td><input type="text" name="author" id="author" /></td>
+      </tr>
+      <tr>
+        <td>Short content:</td>
+        <td>
+          <textarea
+            id="shortContent"
+            name="shortContent"
+            rows="4"
+            cols="50"
+          ></textarea>
+        </td>
+      </tr>
+      <tr>
+        <td>Content:</td>
+        <td>
+          <textarea id="content" name="content" rows="6" cols="80"></textarea>
+        </td>
+      </tr>
+    </table>
+    <div class="submit">
+      <button type="submit" class="btn btn__Send">Send</button>
+      <button type="reset" class="btn btn__Send">Cancel</button>
+      <a href="/adminUI" class="btn btn__Send">Back</a>
+    </div>
+  </form>
+
+
+
+</div>
+

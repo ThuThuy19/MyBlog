@@ -605,42 +605,52 @@ h6 {
   padding: 25px;
   margin-bottom: 80px;
 }
-.form__AddBlog form {
-  width: 60%;
-  margin: 0 auto;
-}
 .form__AddBlog .title__Function {
   text-align: center;
   text-transform: uppercase;
   font-weight: 600;
 }
-.form__AddBlog table tr td {
-  padding: 15px;
-}
-.form__AddBlog table tr td:first-child {
-  font-weight: 600;
-}
-.form__AddBlog table tr td input,
-.form__AddBlog table tr td textarea {
-  background-color: transparent;
-  border: 1px solid rgb(158, 156, 156);
+.simple-image {
+  background-color: var(--bg-header);
   width: 100%;
   padding: 10px;
-}
-.form__AddBlog table tr td .img {
-  width: 50%;
-  height: auto;
-  border: 0;
-}
-.submit {
-  display: flex;
-  justify-content: center;
-}
-.submit .btn__Send {
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  outline: none;
+  font-size: 16px;
   margin: 10px;
-  padding: 8px 25px;
 }
-
+.img img {
+  max-width: 100%;
+  margin-bottom: 15px;
+}
+.simple-image input,
+.simple-image [contenteditable] {
+  background-color: #ccc;
+}
+.img.withBorder img {
+  border: 1px solid #e8e8eb;
+}
+.img.withBackground {
+  background: transparent;
+  padding: 10px;
+}
+.img.withBackground img {
+  display: block;
+  max-width: 60%;
+  margin: 0 auto 15px;
+}
+.codex-editor__redactor{
+  padding-bottom: 0 !important;
+  margin-bottom: 20px;
+}
+.btn-Save-addBlog{
+  display: block;
+  margin: 5px auto;
+}
+.codex-editor ::selection{
+  background-color: #dfbe8a;
+}
 /*--------------------------------------------------------------
   # Login/Register
   --------------------------------------------------------------*/
@@ -673,3 +683,8 @@ h6 {
 .register .card-title{
   font-weight: 600;
 }
+
+
+
+
+
