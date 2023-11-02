@@ -603,6 +603,7 @@ h6 {
 /* Add blog */
 .form__AddBlog {
   padding: 25px;
+  margin-bottom: 80px;
 }
 .form__AddBlog form {
   width: 60%;
