@@ -142,6 +142,9 @@
   .menu__mobile button{
     font-size: 25px;
   }
+  .form__AddBlog{
+    margin-bottom: 50px;
+  }
 }
 
 @media (min-width: 992px) {

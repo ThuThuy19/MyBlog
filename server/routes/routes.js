@@ -246,7 +246,7 @@ routes.put("/edit/:id", authMiddleware, async (req, res) => {
 
 routes.get("/add", authMiddleware, async (req, res) => {
   try {
-    res.render("./addBlog", { layout: "pages/admin" });
+    res.render("./addBlog", { layout: "pages/addBlog" });
   } catch (error) {
     console.log(error);
   }
@@ -263,10 +263,11 @@ routes.post("/add", authMiddleware, async (req, res) => {
         shortContent: req.body.shortContent,
         content: req.body.content,
         author: req.body.author,
-        img: "/img/travel1.jpg",
-        imgFooter: "/img/travel1.jpg",
+        img: req.body.img,
+        imgFooter: req.body.img,
       });
       await Post.create(newPost);
+      res.json({ success: true, message: "Add thanh cong" });
       res.redirect("./adminUI");
     } catch (error) {
       console.log(error);
