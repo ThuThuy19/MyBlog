@@ -24,19 +24,19 @@
         data-bs-toggle="dropdown"
       >
         <img
-          src="/img/avatar.png"
+          src="../<%=user.avatar%>"
           alt="Profile"
           class="rounded-circle"
         />
         <span class="d-none d-md-block dropdown-toggle ps-2"
-          >T.Thuy</span
+          ><%=user.username%></span
         > </a
       ><!-- End Profile Iamge Icon -->
 
       <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
         <li class="dropdown-header">
-          <h6>Thu Thuy</h6>
-          <span>Developer - Oneadx</span>
+          <h6><%=user.fullname%></h6>
+          <span><%=user.job%> - <%=user.company%></span>
         </li>
         <li>
           <hr class="dropdown-divider" />

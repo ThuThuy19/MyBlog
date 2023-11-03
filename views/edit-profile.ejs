@@ -1,14 +1,23 @@
 <!-- Profile Edit Form -->
-<form action="/edit-profile" method="post">
+<form action="/edit-profile" method="post" enctype="multipart/form-data">
   <div class="row mb-3">
     <label for="profileImage" class="col-md-4 col-lg-3 col-form-label"
       >Profile Image</label
     >
     <div class="col-md-8 col-lg-9">
-      <img src="/img/avatar.png" alt="Profile"  id="imageInput" accept="image/*"/>
+      <img
+      src="../<%=user.avatar%>"
+      alt="Profile"
+      id="imageDisplay"
+      />
+      <input type="file" name="avatar" id="imageInput"
+      accept="image/*" style="display: none;">
       <div class="pt-2 ms-3">
-        <a href="#" class="btn btn-sm" title="Upload new profile image"
-         
+        <a
+          href="#"
+          class="btn btn-sm"
+          title="Upload new profile image"
+          id="imagePutIcon"
           onclick="uploadImage()"
           ><i class="fa-solid fa-upload"></i
         ></a>
@@ -32,7 +41,7 @@
         type="text"
         class="form-control"
         id="username"
-        value= '<%=user.username %>'
+        value="<%=user.username %>"
       />
     </div>
   </div>
@@ -47,7 +56,7 @@
         type="text"
         class="form-control"
         id="fullname"
-        value= '<%=user.fullname %>'
+        value="<%=user.fullname %>"
       />
     </div>
   </div>
@@ -76,7 +85,7 @@
         type="text"
         class="form-control"
         id="company"
-        value='<%=user.company %>'
+        value="<%=user.company %>"
       />
     </div>
   </div>
@@ -89,7 +98,7 @@
         type="text"
         class="form-control"
         id="Job"
-        value='<%=user.job %>'
+        value="<%=user.job %>"
       />
     </div>
   </div>
@@ -104,7 +113,7 @@
         type="text"
         class="form-control"
         id="Country"
-        value='<%=user.country %>'
+        value="<%=user.country %>"
       />
     </div>
   </div>
@@ -119,7 +128,7 @@
         type="text"
         class="form-control"
         id="Address"
-        value='<%=user.address %>'
+        value="<%=user.address %>"
       />
     </div>
   </div>
@@ -132,7 +141,7 @@
         type="text"
         class="form-control"
         id="Phone"
-        value='<%=user.phone %>'
+        value="<%=user.phone %>"
       />
     </div>
   </div>
@@ -145,7 +154,7 @@
         type="email"
         class="form-control"
         id="Email"
-        value='<%=user.email %>'
+        value="<%=user.email %>"
       />
     </div>
   </div>

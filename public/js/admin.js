@@ -151,7 +151,7 @@ async function uploadImage() {
   formData.append('image', file);
 
   try {
-    const response = await fetch('/upload', {
+    const response = await fetch('/edit-profile', {
       method: 'POST',
       body: formData
     });
@@ -162,3 +162,30 @@ async function uploadImage() {
     console.error('Error uploading image:', error);
   }
 }
+
+document.getElementById('imagePutIcon').addEventListener('click', function(event) {
+  event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+
+  document.getElementById('imageInput').click(); // Kích hoạt file input khi click vào icon
+});
+
+document.getElementById('imageInput').addEventListener('change', function(event) {
+  // Xử lý sự kiện change của file input
+  const files = event.target.files;
+  console.log('Đã chọn file:', files[0].name);
+  // Thực hiện xử lý với file đã chọn ở đây
+});
+imageInput.addEventListener('change', function(event) {
+  const file = event.target.files[0];
+
+  if (file) {
+    const reader = new FileReader();
+
+    reader.onload = function(e) {
+      imageDisplay.src = e.target.result;
+      imageDisplay.style.display = 'block'; // Hiển thị ảnh khi đã upload
+    };
+
+    reader.readAsDataURL(file);
+  }
+});

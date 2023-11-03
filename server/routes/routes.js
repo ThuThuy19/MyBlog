@@ -10,7 +10,7 @@ import mongoose from "mongoose";
 import session from "express-session";
 import { render } from "ejs";
 import Setup from "../../setup.js";
-// const Setup = require("../../setup.json");
+import multer from 'multer';
 
 async function fetchData() {
   try {
@@ -25,9 +25,11 @@ async function fetchData() {
 routes.use(async (req, res, next) => {
   try {
     const sharedData = await fetchData();
+    const user = await User.findOne({ _id: req.session.userId });
     // Gán dữ liệu vào res.locals
     res.locals.sharedData = sharedData;
     res.locals.Setup = Setup;
+    res.locals.user = user;
     next();
   } catch (error) {
     console.error(error);
@@ -345,13 +347,12 @@ routes.post("/delete/:id", async (req, res) => {
   }
 });
 
-routes.get("/users-profile", (req, res) => {
-  res.render("./profiles", { layout: "pages/users-profile" });
+routes.get("/users-profile", async (req, res) => {
+  res.render("./profiles", { layout: "pages/users-profile"});
 });
 
 routes.get("/changePassword", async (req, res) => {
-  // const data = await User.findById({ _id: req.session.userId });
-  res.render("./changePassword", { layout: "pages/users-profile" });
+  res.render("./changePassword", { layout: "pages/users-profile"});
 });
 
 routes.post('/changePassword', async (req, res) => {
@@ -389,7 +390,6 @@ routes.get("/edit-profile", authMiddleware, async (req, res) => {
   try {
     // get user from session
     const user = await User.findOne({ _id: req.session.userId });
-
     res.render('./edit-profile', { layout: 'pages/users-profile', user : user});
   } catch (error) {
     console.error("Error fetching user profile:", error);
@@ -397,14 +397,32 @@ routes.get("/edit-profile", authMiddleware, async (req, res) => {
   }
 });
 
-routes.post('/edit-profile', authMiddleware, async (req, res) => {
+// Thiết lập Multer storage
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/img'); // Thư mục lưu trữ ảnh
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const ext = file.originalname.split('.').pop(); // Lấy phần mở rộng của file
+    cb(null, `${file.fieldname}-${uniqueSuffix}.${ext}`);
+  },
+});
+
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 25 * 1024 * 1024 }, // Giới hạn size file ảnh: 25MB
+});
+
+routes.post('/edit-profile',upload.single('avatar'), authMiddleware, async (req, res) => {
   try {
     const {username, fullname, about, company, job, country, address, phone, email } = req.body;
-
+    
     // get user from session
     const user = await User.findOne({ _id: req.session.userId });
 
     // update profile
+    user.avatar = req.file.path.split("\\").slice(1).join("/");
     user.username = username;
     user.fullname = fullname;
     user.about = about;
@@ -417,8 +435,6 @@ routes.post('/edit-profile', authMiddleware, async (req, res) => {
 
     await user.save();
     res.render('./edit-profile', { layout: 'pages/users-profile' , user});
-
-    // res.redirect('/edit-profile');
   } catch (error) {
     console.error('Error updating user profile:', error);
     res.status(500).send('Internal server error');
@@ -538,6 +554,7 @@ export default routes;
 
 //     User.insertMany([
 //       {
+//         avatar: "/img/avatar.png",
 //         username:  "admin",
 //         password : "123456",
 //         role: 1,
