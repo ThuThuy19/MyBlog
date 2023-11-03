@@ -603,6 +603,7 @@ h6 {
 /* Add blog */
 .form__AddBlog {
   padding: 25px;
+  margin-bottom: 50px;
 }
 .form__AddBlog .title__Function {
   text-align: center;
@@ -617,7 +618,10 @@ h6 {
   border-radius: 5px;
   outline: none;
   font-size: 16px;
-  margin: 10px;
+  margin: 10px auto;
+}
+.ce-block--selected .ce-block__content{
+  background-color: transparent;
 }
 .img img {
   max-width: 100%;

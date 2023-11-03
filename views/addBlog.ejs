@@ -15,7 +15,7 @@
     tools: {
       image: {
         class: SimpleImage,
-        inlineToolbar: true
+        inlineToolbar: ['link', 'bold', 'italic'],
       }
     },
     
@@ -49,13 +49,13 @@
         const data = await response.json();
         console.log(data);
         if (data.success) {
-          alert("Data saved successfully!"); // Alert success
+          alert("Them blog thanh cong!"); // Alert success
           window.location.href = "/adminUI"; // Redirect to dashboard
         } else {
           alert("Error saving post.");
         }
       } catch (error) {
-        console.error("There was an error saving the post:", error);
+        console.error("Co loi khi luu:", error);
       }
     });
   });

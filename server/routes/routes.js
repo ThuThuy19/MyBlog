@@ -64,7 +64,6 @@ routes.get("/", async (req, res) => {
         .replace(/-+/g, "-")
         .substring(0, 75);
     };
-
     res.render("index", {
       layout: "pages/main",
       locals,
@@ -137,6 +136,16 @@ routes.get("/login", async (req, res) => {
     console.log(error);
   }
 });
+// Session config
+const sessionConfig = {
+  secret: 'yourSecretKey',
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false }, 
+};
+
+// Sử dụng session middleware trong routes
+routes.use(session(sessionConfig));
 
 routes.post("/login", async (req, res) => {
   try {
@@ -147,7 +156,7 @@ routes.post("/login", async (req, res) => {
     if (user || (await bcrypt.compare(password, user.password))) {
       const token = jwt.sign({ userId: user._id }, "yourSecretKey");
       // Send token in cookie
-      // req.session.userId = user._id;
+      req.session.userId = user._id;
       res.cookie("token", token, { httpOnly: true });
       res.redirect("./adminUI");
     } else {
@@ -341,93 +350,84 @@ routes.get("/users-profile", (req, res) => {
 });
 
 routes.get("/changePassword", async (req, res) => {
-  const data = await User.findById({ _id: req.session.userId });
+  // const data = await User.findById({ _id: req.session.userId });
   res.render("./changePassword", { layout: "pages/users-profile" });
 });
 
-// routes.post('/changePassword', async (req, res) => {
-//   try {
-//     const { password, newpassword, renewpassword } = req.body;
+routes.post('/changePassword', async (req, res) => {
+  try {
+    const { password, newpassword, renewpassword } = req.body;
+    // check newPassword like renewpassword
+    if (newpassword !== renewpassword) {
+      return res.render('./changePassword', {
+        error: 'New password and confirm password do not match',
+      });
+    }
+    const user = await User.findOne({ _id: req.session.userId });
 
-//     console.log("pass " + password);
-//     console.log("newpassword " + newpassword);
-//     console.log("renewpassword " + renewpassword);
-//     console.log(newpassword !== renewpassword);
-//     // check newPassword like renewpassword
-//     if (newpassword !== renewpassword) {
-//       return res.render('./changePassword', {
-//         error: 'New password and confirm password do not match',
-//       });
-//     }
-//     const user = await User.findOne({ _id: req.User._id });
-//     console.log("user: " +   user);
+    // hashcode new password
+    const hashedPassword = await bcrypt.hash(newpassword, 10);
 
-//     const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await bcrypt.compare(hashedPassword, user.password);
 
-//     if (!isPasswordValid) {
-//       return res.render('./changePassword', { error: 'Current password is incorrect' });
-//     }
-//     // hashcode new password
-//     const hashedPassword = await bcrypt.hash(newpassword, 10);
+    if (isPasswordValid) {
+      return res.render('./changePassword');
+    }
 
-//     // update new password to db
-//     user.password = hashedPassword;
-//     await user.save();
-//     res.redirect('./login');
-//     // res.render('./changePassword', { success: 'Password changed successfully',layout: "pages/users-profile" });
-//   } catch (error) {
-//     console.error('Error changing password:', error);
-//     res.render('./changePassword', { error: 'Internal server error' });
-//   }
-// });
+    // update new password to db
+    user.password = hashedPassword;
+    await user.save();
+    res.render('./login', { success: 'Password changed successfully',layout: "pages/users-profile" });
+  } catch (error) {
+    console.error('Error changing password:', error);
+    res.render('./changePassword', { error: 'Internal server error' });
+  }
+});
 
 //Edit profile
 routes.get("/edit-profile", authMiddleware, async (req, res) => {
   try {
     // get user from session
-    // const user = await User.findOne({ _id: req.user._id });
+    const user = await User.findOne({ _id: req.session.userId });
 
-    // res.render('./edit-profile', { layout: 'pages/users-profile', user });
-    res.render("./edit-profile", { layout: "pages/users-profile" });
+    res.render('./edit-profile', { layout: 'pages/users-profile', user : user});
   } catch (error) {
     console.error("Error fetching user profile:", error);
     res.status(500).send("Internal server error");
   }
 });
 
-// routes.post('/edit-profile', authMiddleware, async (req, res) => {
-//   try {
-//     const { fullName, about, company, job, country, address, phone, email } = req.body;
+routes.post('/edit-profile', authMiddleware, async (req, res) => {
+  try {
+    const {username, fullname, about, company, job, country, address, phone, email } = req.body;
 
-//     // get user from session
-//     const user = await User.findOne({ _id: req.user._id });
+    // get user from session
+    const user = await User.findOne({ _id: req.session.userId });
 
-//     // update profile
-//     user.fullName = fullName;
-//     user.about = about;
-//     user.company = company;
-//     user.job = job;
-//     user.country = country;
-//     user.address = address;
-//     user.phone = phone;
-//     user.email = email;
+    // update profile
+    user.username = username;
+    user.fullname = fullname;
+    user.about = about;
+    user.company = company;
+    user.job = job;
+    user.country = country;
+    user.address = address;
+    user.phone = phone;
+    user.email = email;
 
-//     await user.save();
+    await user.save();
+    res.render('./edit-profile', { layout: 'pages/users-profile' , user});
 
-//     res.redirect('Admin/users-profile');
-//   } catch (error) {
-//     console.error('Error updating user profile:', error);
-//     res.status(500).send('Internal server error');
-//   }
-// });
+    // res.redirect('/edit-profile');
+  } catch (error) {
+    console.error('Error updating user profile:', error);
+    res.status(500).send('Internal server error');
+  }
+});
 
 routes.get("/logout", (req, res) => {
-  req.session.destroy((err) => {
-    if (err) {
-      console.error(err);
-    }
-    res.redirect("/login");
-  });
+  res.clearCookie("token");
+  res.redirect('./login');
 });
 
 export default routes;

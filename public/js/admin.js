@@ -136,3 +136,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+// Upload avatar image
+async function uploadImage() {
+  const fileInput = document.getElementById('imageInput');
+  const file = fileInput.files[0];
+
+  if (file.size > 25 * 1024 * 1024) {
+    alert('Image size should be less than 25MB');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('image', file);
+
+  try {
+    const response = await fetch('/upload', {
+      method: 'POST',
+      body: formData
+    });
+
+    const data = await response.json();
+    console.log('Image URL:', data.imageUrl);
+  } catch (error) {
+    console.error('Error uploading image:', error);
+  }
+}
