@@ -31,7 +31,6 @@ class SimpleImage {
     this.wrapper.appendChild(categoryInput);
 
     // Date
-
     const dateInput = document.createElement("input");
     dateInput.classList.add("simple-image");
     dateInput.classList.add("time");
@@ -87,7 +86,6 @@ class SimpleImage {
 
   _createImage(url) {
     this.imageContainer.innerHTML = ""; // clear any previous images
-
     if (url.trim() !== "") {
       const image = document.createElement("img");
       image.src = url;
@@ -124,7 +122,7 @@ class SimpleImage {
   // validate(savedData){
   //   if (!savedData.url.trim()){
   //     return false;
-  //   }
+  //   } 
   //   return true;
   // }
 }

@@ -25,11 +25,24 @@ async function fetchData() {
 routes.use(async (req, res, next) => {
   try {
     const sharedData = await fetchData();
+
+    // Lay ra user tu bang so sanh id cua session
     const user = await User.findOne({ _id: req.session.userId });
-    // Gán dữ liệu vào res.locals
+
+    // Tao slug tu tieu de de tao URL SEO-friendly
+    const seoURL = (title) => {
+      return title
+        .toLowerCase()
+        .replace(/[^a-z0-9 -]/g, "")
+        .replace(/\s+/g, "-")
+        .replace(/-+/g, "-")
+        .substring(0, 75);
+    };
+    // Gan du lieu vao res.locals
     res.locals.sharedData = sharedData;
     res.locals.Setup = Setup;
     res.locals.user = user;
+    res.locals.seoURL = seoURL;
     next();
   } catch (error) {
     console.error(error);
@@ -43,7 +56,6 @@ routes.get("/", async (req, res) => {
   try {
     const locals = {
       title: Setup.title,
-      // title: "My blog",
     };
     let perPage = 6;
     let page = req.query.page || 1;
@@ -56,16 +68,7 @@ routes.get("/", async (req, res) => {
     const nextPage = parseInt(page) + 1;
     const hasNextPage = nextPage <= Math.ceil(count / perPage);
     const countPages = Math.ceil(count / perPage);
-
-    // Tạo slug từ tiêu đề để tạo URL SEO-friendly
-    const seoURL = (title) => {
-      return title
-        .toLowerCase()
-        .replace(/[^a-z0-9 -]/g, "")
-        .replace(/\s+/g, "-")
-        .replace(/-+/g, "-")
-        .substring(0, 75);
-    };
+    
     res.render("index", {
       layout: "pages/main",
       locals,
@@ -74,7 +77,6 @@ routes.get("/", async (req, res) => {
       category,
       current: page,
       nextPage: hasNextPage ? nextPage : null,
-      seoURL,
     });
   } catch (error) {
     console.log(error);
@@ -83,9 +85,9 @@ routes.get("/", async (req, res) => {
 });
 
 // Search
-routes.post("/search", async (req, res) => {
+routes.post("/search/:seoURL", async (req, res) => {
   try {
-    let searchTerm = req.body.searchTerm;
+    const searchTerm = req.body.searchTerm;
     // Xóa ký tự đặc biệt để tìm kiếm chính xác hơn
     const searchNoSpecialChar = searchTerm.replace(/[^a-zA-Z0-9\s]/g, "");
     const data = await Post.find({
@@ -434,7 +436,7 @@ routes.post('/edit-profile',upload.single('avatar'), authMiddleware, async (req,
     user.email = email;
 
     await user.save();
-    res.render('./edit-profile', { layout: 'pages/users-profile' , user});
+    res.render('./profiles', { layout: 'pages/users-profile' , user});
   } catch (error) {
     console.error('Error updating user profile:', error);
     res.status(500).send('Internal server error');

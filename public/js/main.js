@@ -36,17 +36,12 @@ function loadHeader() {
 }
 window.addEventListener("scroll", loadHeader);
 
-
-// function submitSearch() {
-//   const searchTerm = document.getElementById('s').value;
-//   const searchForm = document.getElementById('searchForm');
-  
-//   // Replace whitespace in the search term with hyphens to create a SEO-friendly URL
-//   // const seoFriendlyTerm = searchTerm.replace(/\s+/g, '-');
-
-//   searchForm.action = `/search/${seoFriendlyTerm}`;
-//   searchForm.submit();
-// }
-
-
-
+function changeAction() {
+  const searchTerm = document.getElementById("s").value.trim();
+  const formattedSearchTerm = searchTerm.replace(/\s+/g, "-");
+  // Thay đổi action của form dựa trên giá trị nhập vào
+  const form = document.querySelector(".search form");
+  form.action = `/search/${formattedSearchTerm}`; // Thay đổi action theo giá trị nhập vào
+  // Trả về true để submit form với action mới
+  return true;
+}
