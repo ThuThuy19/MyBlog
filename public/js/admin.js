@@ -139,51 +139,53 @@ document.addEventListener("DOMContentLoaded", () => {
 
 // Upload avatar image
 async function uploadImage() {
-  const fileInput = document.getElementById('imageInput');
+  const fileInput = document.getElementById("imageInput");
   const file = fileInput.files[0];
 
   if (file.size > 25 * 1024 * 1024) {
-    alert('Image size should be less than 25MB');
+    alert("Image size should be less than 25MB");
     return;
   }
 
   const formData = new FormData();
-  formData.append('image', file);
+  formData.append("image", file);
 
   try {
-    const response = await fetch('/edit-profile', {
-      method: 'POST',
-      body: formData
+    const response = await fetch("/edit-profile", {
+      method: "POST",
+      body: formData,
     });
 
     const data = await response.json();
-    console.log('Image URL:', data.imageUrl);
+    console.log("Image URL:", data.imageUrl);
   } catch (error) {
-    console.error('Error uploading image:', error);
+    console.error("Error uploading image:", error);
   }
 }
 
-document.getElementById('imagePutIcon').addEventListener('click', function(event) {
-  event.preventDefault(); // Ngăn chặn hành vi mặc định của thẻ a
+document
+  .getElementById("imagePutIcon")
+  .addEventListener("click", function (event) {
+    event.preventDefault();
+    // active file input when click icon
+    document.getElementById("imageInput").click();
+  });
 
-  document.getElementById('imageInput').click(); // Kích hoạt file input khi click vào icon
-});
-
-document.getElementById('imageInput').addEventListener('change', function(event) {
-  // Xử lý sự kiện change của file input
-  const files = event.target.files;
-  console.log('Đã chọn file:', files[0].name);
-  // Thực hiện xử lý với file đã chọn ở đây
-});
-imageInput.addEventListener('change', function(event) {
+document
+  .getElementById("imageInput")
+  .addEventListener("change", function (event) {
+    // Xử lý sự kiện change của file input
+    const files = event.target.files;
+  });
+imageInput.addEventListener("change", function (event) {
   const file = event.target.files[0];
 
   if (file) {
     const reader = new FileReader();
 
-    reader.onload = function(e) {
+    reader.onload = function (e) {
       imageDisplay.src = e.target.result;
-      imageDisplay.style.display = 'block'; // Hiển thị ảnh khi đã upload
+      imageDisplay.style.display = "block";
     };
 
     reader.readAsDataURL(file);
