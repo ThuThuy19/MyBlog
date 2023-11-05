@@ -104,8 +104,6 @@ class SimpleImage {
     const authorValue = blockContent.querySelector(".author").value;
     const imageUrlValue = blockContent.querySelector(".img").value;
 
-    const caption = blockContent.querySelector('[contenteditable]');
-
     return {
       title: titleValue,
       category: categoryValue,
@@ -115,8 +113,6 @@ class SimpleImage {
       author: authorValue,
       img: imageUrlValue,
       imgFooter: imageUrlValue,
-
-      caption: caption.innerHTML || ''
     };
   }
   // validate(savedData){

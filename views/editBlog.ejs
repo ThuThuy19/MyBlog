@@ -3,7 +3,7 @@
   <form action="/edit/<%= data._id %>?_method=PUT" method="POST">
 
 
-    <table>
+    <table class="edit__table">
       <tr>
         <td>ID new:</td>
         <td><input type="hidden" name="id" id="id" /> <%= data._id %></td>
@@ -30,7 +30,6 @@
             src="<%= data.img %>"
             alt="Anh <%= data.img %>"
           />
-          <!-- <input type="file" name="" id="" class="img"> -->
         </td>
       </tr>
       <tr>

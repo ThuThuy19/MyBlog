@@ -36,7 +36,7 @@
                 <div class="new__item">
                     <i class="fa-regular fa-calendar"></i>
                     <span class="date"><i><%= recentNew.date.toDateString() %></i></span>
-                    <a href="#" title="<%= recentNew.title %>"><%= recentNew.title %></a>
+                    <a href="/blog/<%= recentNew._id %>/<%= seoURL(recentNew.title) %>" title="<%= recentNew.title %>"><%= recentNew.title %></a>
                 </div>
                 <% }); %>
             </div>
@@ -46,7 +46,7 @@
             <h6 class="footer__heading">New Feed</h6>
             <div class="new__Feed_content">
                 <% sharedData.forEach(function(img) { %>
-                <a href="/<%= img._id%>" class="new__Feed__item">
+                <a href="/blog/<%= img._id %>/<%= seoURL(img.title) %>" class="new__Feed__item">
                     <img src="<%= img.img %>" alt="Anh footer">
                 </a>
                 <% }); %>

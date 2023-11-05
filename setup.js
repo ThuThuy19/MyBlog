@@ -11,6 +11,11 @@ const routes = {
     "title_slider": "FUSCE FERMENTUM NISI",
     "img_advertising": "/img/advertising.jpg",
     "img_signing": "/img/signing.png",
+    "facebook_icon" : "fa-brands fa-facebook-f",
+    "Google_icon": "fa-brands fa-google-plus-g",
+    "Youtube_icon": "fa-brands fa-youtube",
+    "LinkedIn_icon": "fa-brands fa-linkedin",
+    "GitLab_icon": "fa-brands fa-gitlab"
 };
 
 export default routes;

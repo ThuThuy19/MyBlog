@@ -84,6 +84,25 @@ routes.get("/", async (req, res) => {
   }
 });
 
+// Category
+routes.get('/blog/:name', async (req, res) => {
+  try {
+    // Lấy thông tin name từ URL
+    const categoryName = req.params.name;
+    console.log("categoryName: "+ categoryName);
+    // Tìm kiếm các bài viết trong Post có category trùng với categoryName
+    const blogsInCategory = await Post.find({ category: categoryName })
+      .populate('Categories') // Nếu cần thông tin của category, dùng populate
+      .exec();
+
+    console.log("blogsInCategory: ", blogsInCategory);
+    res.render("./categories", { blogsInCategory, layout: "pages/main" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'Error occurred while fetching blogs by category' });
+  }
+});
+
 // Search
 routes.post("/search/:seoURL", async (req, res) => {
   try {
@@ -140,6 +159,7 @@ routes.get("/login", async (req, res) => {
     console.log(error);
   }
 });
+
 // Session config
 const sessionConfig = {
   secret: 'yourSecretKey',
@@ -202,7 +222,6 @@ routes.get("/adminUI", authMiddleware, async (req, res) => {
 routes.get("/edit/:id", authMiddleware, async (req, res) => {
   try {
     const data = await Post.findOne({ _id: req.params.id });
-    console.log("data " + data);
     if (data) {
       const date = data.date;
       const formattedDate = `${date.getFullYear()}-${String(
@@ -281,7 +300,6 @@ routes.post("/add", authMiddleware, async (req, res) => {
       });
       await Post.create(newPost);
       res.json({ success: true, message: "Add thanh cong" });
-      res.redirect("./adminUI");
     } catch (error) {
       console.log(error);
     }
@@ -332,7 +350,6 @@ routes.post("/register", async (req, res) => {
 routes.post("/delete/:id", async (req, res) => {
   try {
     const postId = req.params.id;
-    console.log(postId);
     const result = await Post.findByIdAndRemove(postId);
 
     if (!result) {
@@ -572,23 +589,23 @@ export default routes;
 //     ])
 //     Categories.insertMany([
 //       {
-//         name: "food",
+//         name: "Food",
 //         decription: "food"
 //       },
 //       {
-//         name: "travel",
+//         name: "Travel",
 //         decription: "travel"
 //       },
 //       {
-//         name: "fashion",
+//         name: "Fashion",
 //         decription: "fashion"
 //       },
 //       {
-//         name: "style",
+//         name: "Style",
 //         decription: "style"
 //       },
 //       {
-//         name: "technology",
+//         name: "Technology",
 //         decription: "technology"
 //       }
 //     ])

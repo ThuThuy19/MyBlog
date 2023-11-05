@@ -9,6 +9,11 @@ const PostSchema = new Schema({
         type: Date,
         require: true
     },
+    // category: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     required: true,
+    //     ref: 'Categories' // Tham chiếu đến model Category
+    // },
     category: {
         type: String,
         required: true,

@@ -43,7 +43,6 @@ h3,
 h4,
 h5,
 h6 {
-  /* font-family: "Nunito", sans-serif; */
   font-family: "Open Sans", sans-serif;
 }
 .logo {
@@ -356,7 +355,6 @@ h6 {
   font-weight: 600;
   color: var(--font-color-hover);
   transition: 0.3;
-  /* background: var(--bg-header); */
   padding: 10px 15px;
   border-radius: 4px;
 }
@@ -369,7 +367,6 @@ h6 {
 
 .sidebar-nav .nav-link.collapsed {
   color: var(--font-color-default);
-  /* background: #fff; */
   background-color: rgba(217, 217, 217, 0.3);
 }
 
@@ -404,7 +401,6 @@ h6 {
   justify-content: space-evenly;
 }
 .blog__container .blog__item {
-  /* width: 30%; */
   padding: 10px;
 }
 .blog__item .blog__img {
@@ -433,7 +429,6 @@ h6 {
   margin-bottom: 5px;
 }
 .blog__content .blog__date {
-  /* margin-top: 5px; */
   padding-top: 5px;
   font-size: 13px;
 }
@@ -653,6 +648,12 @@ h6 {
 }
 .codex-editor ::selection{
   background-color: #dfbe8a;
+}
+.form__AddBlog .edit__table > tr > td{
+  margin: 50px 100px;
+}
+.form__AddBlog .edit__table tr td .img{
+  width: 100px;
 }
 /*--------------------------------------------------------------
   # Login/Register

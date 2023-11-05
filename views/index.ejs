@@ -66,8 +66,9 @@
         <img src="<%= blog.img %>" alt="Anh <%= blog.category %>" />
         <div class="category">
           <a
-            href="/blog/<%= blog._id%>"
+            href="/blog/<%= blog.category %>"
             title="View all posts in <%= blog.category %>"
+            name ="category"
             ><%= blog.category %></a
           >
         </div>
@@ -147,7 +148,7 @@
           <img src="<%= blog.img %>" alt="Anh latest post" class="col-4" />
           <div class="info__post col-8">
             <h5>
-              <a href="<%= blog._id %> " title="<%= blog.title %>"
+              <a href="/blog/<%= blog._id %>/<%= seoURL(blog.title) %>" title="<%= blog.title %>"
                 ><%= blog.title %></a
               >
             </h5>
@@ -162,19 +163,19 @@
       <h3 class="widget__title">Social</h3>
       <div class="follow-container">
         <a href="#">
-          <i class="fa-brands fa-facebook-f"></i>
+          <i class="<%=Setup.facebook_icon %>"></i>
         </a>
         <a href="#">
-          <i class="fa-brands fa-google-plus-g"></i>
+          <i class="<%=Setup.Google_icon %>""></i>
         </a>
         <a href="#">
-          <i class="fa-brands fa-youtube"></i>
+          <i class="<%=Setup.Youtube_icon %>""></i>
         </a>
         <a href="#">
-          <i class="fa-brands fa-linkedin"></i>
+          <i class="<%=Setup.LinkedIn_icon %>""></i>
         </a>
         <a href="#">
-          <i class="fa-brands fa-gitlab"></i>
+          <i class="<%=Setup.GitLab_icon %>""></i>
         </a>
       </div>
     </div>
