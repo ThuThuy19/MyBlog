@@ -103,10 +103,14 @@
 .navigation__post .post__prev img{
     border-radius: 10px 0 0 10px;
     float: left;
+    height: 70px;
+    width: 70px;
 }
 .navigation__post .next__post img{
     border-radius: 0 10px 10px 0;
     float: right;
+    height: 70px;
+    width: 70px;
 }
 .post__prev .prev,
 .next__post .next{

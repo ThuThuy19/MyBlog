@@ -1,6 +1,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
-<script src="/js/editBlog.js"></script>
+<script src="/js/addBlog.js"></script>
 <link href="/css/admin.css" rel="stylesheet" />
+
 <div class="form__AddBlog">
   <h1 class="title__Function">Add blog</h1>
   <div id="editorjs"></div>
@@ -15,10 +16,9 @@
     tools: {
       image: {
         class: SimpleImage,
-        inlineToolbar: true
+        inlineToolbar: ['link', 'bold', 'italic'],
       }
     },
-    
   });
 
 
@@ -49,13 +49,13 @@
         const data = await response.json();
         console.log(data);
         if (data.success) {
-          alert("Data saved successfully!"); // Alert success
+          alert("Them blog thanh cong!"); // Alert success
           window.location.href = "/adminUI"; // Redirect to dashboard
         } else {
           alert("Error saving post.");
         }
       } catch (error) {
-        console.error("There was an error saving the post:", error);
+        console.error("Co loi khi luu:", error);
       }
     });
   });

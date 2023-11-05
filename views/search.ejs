@@ -19,7 +19,7 @@
         </div>
         <div class="post__text">
           <span class="date"><%= blog.date.toDateString() %></span>
-          <h3><a href="/<%= blog._id%>"><%= blog.title %></a></h3>
+          <h3><a href="/blog/<%= blog._id %>/<%= seoURL(blog.title) %>"><%= blog.title %></a></h3>
           <p class="text"><%= blog.shortContent %></p>
         </div>
         <div class="post__info">
@@ -116,9 +116,11 @@
           <% }); %>
         </div>
       </div>
+
     </div>
   </section>
 </main>
+
 
 
 

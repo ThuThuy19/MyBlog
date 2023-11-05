@@ -1,13 +1,24 @@
 <!-- Profile Edit Form -->
-<form action="/edit-profile" method="post">
+<form action="/edit-profile" method="post" enctype="multipart/form-data">
   <div class="row mb-3">
     <label for="profileImage" class="col-md-4 col-lg-3 col-form-label"
       >Profile Image</label
     >
     <div class="col-md-8 col-lg-9">
-      <img src="/img/avatar.png" alt="Profile" />
+      <img
+      src="../<%=user.avatar%>"
+      alt="Profile"
+      id="imageDisplay"
+      />
+      <input type="file" name="avatar" id="imageInput"
+      accept="image/*" style="display: none;">
       <div class="pt-2 ms-3">
-        <a href="#" class="btn btn-sm" title="Upload new profile image"
+        <a
+          href="#"
+          class="btn btn-sm"
+          title="Upload new profile image"
+          id="imagePutIcon"
+          onclick="uploadImage()"
           ><i class="fa-solid fa-upload"></i
         ></a>
         <a
@@ -21,16 +32,31 @@
   </div>
 
   <div class="row mb-3">
-    <label for="fullName" class="col-md-4 col-lg-3 col-form-label"
+    <label for="fullname" class="col-md-4 col-lg-3 col-form-label"
+      >User Name</label
+    >
+    <div class="col-md-8 col-lg-9">
+      <input
+        name="username"
+        type="text"
+        class="form-control"
+        id="username"
+        value="<%=user.username %>"
+      />
+    </div>
+  </div>
+
+  <div class="row mb-3">
+    <label for="fullname" class="col-md-4 col-lg-3 col-form-label"
       >Full Name</label
     >
     <div class="col-md-8 col-lg-9">
       <input
-        name="fullName"
+        name="fullname"
         type="text"
         class="form-control"
-        id="fullName"
-        value="Nguyen Thi Thu Thuy"
+        id="fullname"
+        value="<%=user.fullname %>"
       />
     </div>
   </div>
@@ -44,7 +70,7 @@
         id="about"
         style="height: 100px"
       >
-Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.</textarea
+      <%=user.about %></textarea
       >
     </div>
   </div>
@@ -59,7 +85,7 @@ Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Temp
         type="text"
         class="form-control"
         id="company"
-        value="OneADX"
+        value="<%=user.company %>"
       />
     </div>
   </div>
@@ -72,7 +98,7 @@ Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Temp
         type="text"
         class="form-control"
         id="Job"
-        value="Developer"
+        value="<%=user.job %>"
       />
     </div>
   </div>
@@ -87,7 +113,7 @@ Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Temp
         type="text"
         class="form-control"
         id="Country"
-        value="VietNam"
+        value="<%=user.country %>"
       />
     </div>
   </div>
@@ -102,7 +128,7 @@ Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Temp
         type="text"
         class="form-control"
         id="Address"
-        value="Nam Tu Liem, Ha Noi"
+        value="<%=user.address %>"
       />
     </div>
   </div>
@@ -115,7 +141,7 @@ Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Temp
         type="text"
         class="form-control"
         id="Phone"
-        value="0123456789"
+        value="<%=user.phone %>"
       />
     </div>
   </div>
@@ -128,7 +154,7 @@ Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Temp
         type="email"
         class="form-control"
         id="Email"
-        value="thuyntt.oneadx@gmail.com"
+        value="<%=user.email %>"
       />
     </div>
   </div>
