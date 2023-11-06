@@ -419,6 +419,9 @@ h6 {
 .blog__img .category a {
   padding: 6px 12px;
 }
+.blog__img .category a:hover{
+  color: #333;
+}
 .blog__content {
   background-color: var(--bg-card);
   text-align: center;
@@ -652,8 +655,46 @@ h6 {
 .form__AddBlog .edit__table > tr > td{
   margin: 50px 100px;
 }
-.form__AddBlog .edit__table tr td .img{
-  width: 100px;
+
+/* Edit blog */
+.form__EditBlog {
+  padding: 25px;
+  margin-bottom: 100px;
+}
+.form__EditBlog form {
+  width: 60%;
+  margin: 0 auto;
+}
+.form__EditBlog .title__Function {
+  text-align: center;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+.form__EditBlog table tr td {
+  padding: 15px;
+}
+.form__EditBlog table tr td:first-child {
+  font-weight: 600;
+}
+.form__EditBlog table tr td input,
+.form__EditBlog table tr td textarea {
+  background-color: transparent;
+  border: 1px solid rgb(158, 156, 156);
+  width: 100%;
+  padding: 10px;
+}
+.form__EditBlog table tr td .img {
+  width: 50%;
+  height: auto;
+  border: 0;
+}
+.submit {
+  display: flex;
+  justify-content: center;
+}
+.submit .btn__Send {
+  margin: 10px;
+  padding: 8px 25px;
 }
 /*--------------------------------------------------------------
   # Login/Register

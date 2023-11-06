@@ -22,6 +22,24 @@ async function fetchData() {
   }
 }
 
+// Thiết lập Multer storage de luu tru anh
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, 'public/img'); // Thư mục lưu trữ ảnh
+  },
+  filename: function (req, file, cb) {
+    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
+    const ext = file.originalname.split('.').pop(); // Lấy phần mở rộng của file
+    cb(null, `${file.fieldname}-${uniqueSuffix}.${ext}`);
+  },
+});
+
+// Upload anh
+const upload = multer({
+  storage: storage,
+  limits: { fileSize: 25 * 1024 * 1024 }, // Giới hạn size file ảnh: 25MB
+});
+
 routes.use(async (req, res, next) => {
   try {
     const sharedData = await fetchData();
@@ -237,7 +255,7 @@ routes.get("/edit/:id", authMiddleware, async (req, res) => {
   }
 });
 
-routes.put("/edit/:id", authMiddleware, async (req, res) => {
+routes.put("/edit/:id",upload.single('img'), authMiddleware, async (req, res) => {
   try {
     const {
       title,
@@ -245,9 +263,8 @@ routes.put("/edit/:id", authMiddleware, async (req, res) => {
       category,
       shortContent,
       content,
-      author,
       img,
-      imgFooter,
+      author
     } = req.body;
     if (!date) {
       return res.status(400).send("Date is required");
@@ -262,7 +279,7 @@ routes.put("/edit/:id", authMiddleware, async (req, res) => {
         content,
         author,
         img,
-        imgFooter,
+        imgFooter :img,
       },
       { new: true }
     );
@@ -270,6 +287,10 @@ routes.put("/edit/:id", authMiddleware, async (req, res) => {
       return res.status(404).send("Post not found");
     }
     res.redirect(`/edit/${req.params.id}`);
+
+
+
+    
   } catch (error) {
     console.log(error);
     res.status(500).send("Server Error");
@@ -323,24 +344,27 @@ routes.post("/register", async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = await User.create({
+      avatar: " ",
       username: username,
       password: hashedPassword,
       role: 0,
       fullname: name,
       email: email,
-      company: "Cong ty TNHH OneADX",
-      job: "Developer",
-      country: "Viet Nam",
-      address: "TP Ho Chi Minh",
-      phone: "123654987",
+      company: " ",
+      job: " ",
+      country: " ",
+      address: " ",
+      phone: " ",
       about:
-        "Sunt est soluta temporibus accusantium neque nam maiores cumque temporibus. Tempora libero non est unde veniam est qui dolor. Ut sunt iure rerum quae quisquam autem eveniet perspiciatis odit. Fuga sequi sed ea saepe at unde.",
+        " ",
     });
+    console.log("user: " + user);
     res.redirect("/adminUI");
     // res.status(201).json({ message: 'User created', user });
   } catch (error) {
     console.log(error);
     if (error.code === 11000) {
+      // return res.redirect("/adminUI");
       return res.status(409).json({ message: "User already in use" });
     }
     res.status(500).json({ message: "Internal server error" });
@@ -416,23 +440,6 @@ routes.get("/edit-profile", authMiddleware, async (req, res) => {
   }
 });
 
-// Thiết lập Multer storage
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'public/img'); // Thư mục lưu trữ ảnh
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-    const ext = file.originalname.split('.').pop(); // Lấy phần mở rộng của file
-    cb(null, `${file.fieldname}-${uniqueSuffix}.${ext}`);
-  },
-});
-
-const upload = multer({
-  storage: storage,
-  limits: { fileSize: 25 * 1024 * 1024 }, // Giới hạn size file ảnh: 25MB
-});
-
 routes.post('/edit-profile',upload.single('avatar'), authMiddleware, async (req, res) => {
   try {
     const {username, fullname, about, company, job, country, address, phone, email } = req.body;
@@ -461,8 +468,17 @@ routes.post('/edit-profile',upload.single('avatar'), authMiddleware, async (req,
 });
 
 routes.get("/logout", (req, res) => {
-  res.clearCookie("token");
-  res.redirect('./login');
+   // Xóa cookie "token"
+   res.clearCookie("token");
+   // Hủy session
+   req.session.destroy((err) => {
+     if (err) {
+       console.log(err);
+     } else {
+       // Sau khi hủy session, chuyển hướng về trang đăng nhập
+       res.redirect('/login');
+     }
+   });
 });
 
 export default routes;

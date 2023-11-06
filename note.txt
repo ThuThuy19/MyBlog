@@ -39,34 +39,3 @@ pass: Thuy.oneadx
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  document.getElementById('searchForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Ngăn form gửi yêu cầu mặc định
-
-    // Lấy giá trị từ trường input
-    const searchTerm = document.getElementById('s').value.trim();
-
-    if (searchTerm) {
-      const form = document.querySelector('.search form');
-      form.action = `/search/<%=seoURL(${searchTerm}) %>`; // Thay đổi action theo giá trị nhập vào
-        // Gửi form với action đã thay đổi
-      return true;
-
-      // document.getElementById('searchForm').submit();
-    } else {
-      alert('Please enter a search term!');
-    }
-  });
